@@ -37,10 +37,10 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        _buildCorner(),
         _buildMainContent(context),
         _buildTimelineList(context),
         _buildLaneList(context),
+        _buildCorner(),
       ],
     );
   }
@@ -50,10 +50,19 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
       left: 0,
       top: 0,
       child: SizedBox(
-        width: widget.agendaStyle.timeItemWidth,
+        width: widget.agendaStyle.timeItemWidth + 1,
         height: widget.agendaStyle.pillarHeight,
         child: DecoratedBox(
-          decoration: BoxDecoration(color: widget.agendaStyle.cornerColor),
+          decoration: BoxDecoration(
+            color: widget.agendaStyle.cornerColor,
+            border: Border(
+                right: BorderSide(
+                  color: widget.agendaStyle.timelineBorderColor,
+                ),
+                bottom: BorderSide(
+                  color: widget.agendaStyle.timelineBorderColor,
+                )),
+          ),
         ),
       ),
     );
@@ -93,7 +102,8 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
       padding: EdgeInsets.only(top: widget.agendaStyle.pillarHeight),
       decoration: BoxDecoration(
         color: widget.agendaStyle.timelineColor,
-        border: Border(right: BorderSide(color: Color(0xFFCECECE))),
+        border: Border(
+            right: BorderSide(color: widget.agendaStyle.timelineBorderColor)),
       ),
       child: ListView(
         physics: const ClampingScrollPhysics(),
@@ -136,7 +146,8 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
       alignment: Alignment.topLeft,
       decoration: BoxDecoration(
         color: widget.agendaStyle.pillarColor,
-        border: Border(bottom: BorderSide(color: Color(0xFFCECECE))),
+        border: Border(
+            bottom: BorderSide(color: widget.agendaStyle.timelineBorderColor)),
       ),
       height: widget.agendaStyle.pillarHeight,
       padding: EdgeInsets.only(left: widget.agendaStyle.timeItemWidth),
@@ -151,7 +162,9 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
             height: pillar.head.height,
             decoration: BoxDecoration(
               color: pillar.head.backgroundColor,
-              border: Border(left: BorderSide(color: Color(0xFFCECECE))),
+              border: Border(
+                  left: BorderSide(
+                      color: widget.agendaStyle.timelineBorderColor)),
             ),
             child: Center(
               child: Text(

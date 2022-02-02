@@ -18,10 +18,10 @@ class PillarView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: height(),
-      width: agendaStyle.pillarWidth + 1,
+      width: agendaStyle.pillarWidth,
       decoration: agendaStyle.pillarSeparator
           ? BoxDecoration(
-              border: Border(right: BorderSide(color: Color(0xFFCECECE))))
+              border: Border(left: BorderSide(color: Color(0xFFCECECE))))
           : BoxDecoration(),
       child: Stack(
         children: [
