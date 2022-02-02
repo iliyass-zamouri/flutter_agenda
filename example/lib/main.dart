@@ -76,7 +76,6 @@ class _AgendaScreenState extends State<AgendaScreen> {
       child: Scaffold(
         body: AgendaView(
           pillarList: pillars,
-          // agendaStyle: AgendaStyle(cornerColor: Colors.black),
         ),
       ),
     );
