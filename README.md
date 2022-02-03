@@ -10,7 +10,7 @@ Agenda Widget Package for Flutter
 
 ## Video Recording
 
-<img src="https://github.com/iliyass-zamouri/flutter_agenda/blob/main/images/flutter_agenda.gif" height="440" />  
+<img src="images/flutter_agenda.gif" height="440" />  
 
 # Install
 
