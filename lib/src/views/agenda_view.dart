@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_agenda/src/models/pillar.dart';
 import 'package:flutter_agenda/src/styles/agenda_style.dart';
 import 'package:flutter_agenda/src/utils/utils.dart';
+import 'package:flutter_agenda/src/extensions/expand_equally.dart';
+import 'package:flutter_agenda/src/extensions/separator.dart';
 import 'package:flutter_agenda/src/views/controller/agenda_view_controller.dart';
 import 'package:flutter_agenda/src/views/diagonal_scroll_view.dart';
 import 'package:flutter_agenda/src/views/pillar_view.dart';
@@ -38,8 +40,8 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
     return Stack(
       children: <Widget>[
         _buildMainContent(context),
-        _buildTimelineList(context),
-        _buildLaneList(context),
+        _buildTimeLines(context),
+        _buildPillars(context),
         _buildCorner(),
       ],
     );
@@ -95,7 +97,7 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
     );
   }
 
-  Widget _buildTimelineList(BuildContext context) {
+  Widget _buildTimeLines(BuildContext context) {
     return Container(
       alignment: Alignment.topLeft,
       width: widget.agendaStyle.timeItemWidth + 1,
@@ -118,7 +120,6 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
         ].map((hour) {
           return Container(
             height: widget.agendaStyle.timeItemHeight,
-            padding: EdgeInsets.symmetric(vertical: 4, horizontal: 5),
             decoration: BoxDecoration(
               border: Border(
                 top: BorderSide(
@@ -128,20 +129,52 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
               ),
               color: widget.agendaStyle.timelineItemColor,
             ),
-            child: Text(
-              Utils.hourFormatter(hour, 0),
-              style: TextStyle(
-                  color: widget.agendaStyle.timeItemTextColor,
-                  fontWeight: FontWeight.w700),
-              textAlign: TextAlign.right,
-            ),
+            child: widget.agendaStyle.timeItemHeight == 80
+                ? Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 2, horizontal: 5),
+                        child: Text(
+                          Utils.hourFormatter(hour, 0),
+                          style: TextStyle(
+                              color: widget.agendaStyle.timeItemTextColor,
+                              fontWeight: FontWeight.w700),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 2, horizontal: 5),
+                        child: Text(
+                          Utils.hourFormatter(hour, 30),
+                          style: TextStyle(
+                              color: widget.agendaStyle.timeItemTextColor,
+                              fontWeight: FontWeight.w700),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                    ]
+                        .expandEqually()
+                        .seperate(widget.agendaStyle.timelineBorderColor)
+                        .toList(),
+                  )
+                : Text(
+                    Utils.hourFormatter(hour, 0),
+                    style: TextStyle(
+                        color: widget.agendaStyle.timeItemTextColor,
+                        fontWeight: FontWeight.w700),
+                    textAlign: TextAlign.right,
+                  ),
           );
         }).toList(),
       ),
     );
   }
 
-  Widget _buildLaneList(BuildContext context) {
+  Widget _buildPillars(BuildContext context) {
     return Container(
       alignment: Alignment.topLeft,
       decoration: BoxDecoration(

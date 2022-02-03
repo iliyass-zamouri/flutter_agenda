@@ -14,9 +14,12 @@ Agenda Widget Package for Flutter
 
 # Install
 
-https://pub.dev/packages/flutter_agenda#-installing-tab-
+https://pub.dev/packages/flutter_agenda/install
 
 # Usage
+
+You can use the pillars as an employees,
+and events as meetings during the day.
 
 ## Basic
 
@@ -93,9 +96,89 @@ class _AgendaScreenState extends State<AgendaScreen> {
 ```
 
 ## Customized
-
+Agenda Customizations
 ```
-todo
+  int startHour;
+
+  int endHour;
+
+  Color pillarColor;
+
+  Color cornerColor;
+
+  Color timeItemTextColor;
+
+  Color timelineColor;
+
+  Color timelineItemColor;
+
+  Color mainBackgroundColor;
+
+  Color timelineBorderColor;
+
+  Color decorationLineBorderColor;
+
+  double pillarWidth;
+
+  double pillarHeight;
+
+  double timeItemHeight;
+
+  double timeItemWidth;
+
+  double decorationLineHeight;
+
+  double decorationLineDashWidth;
+
+  double eventBorderWidth;
+
+  bool pillarSeparator;
+
+  double decorationLineDashSpaceWidth;
+
+  bool visibleTimeBorder;
+
+  bool visibleDecorationBorder;
+```
+
+PillarHead Customizations
+```
+  String name;
+
+  double height;
+
+  double width;
+
+  Color backgroundColor;
+
+  TextStyle textStyle;
+
+  Color textColor;
+```
+
+Event Customizations
+```
+  String title;
+
+  String subtitle;
+
+  EventTime start;
+
+  EventTime end;
+
+  EdgeInsets padding;
+
+  EdgeInsets? margin;
+
+  VoidCallback? onTap;
+
+  BoxDecoration? decoration;
+
+  Color backgroundColor;
+
+  TextStyle textStyle;
+
+  TextStyle subtitleStyle;
 ```
 
 # Contributing

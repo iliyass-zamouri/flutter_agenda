@@ -35,7 +35,7 @@ class _AgendaScreenState extends State<AgendaScreen> {
             title: 'Event D',
             subtitle: 'CC',
             start: EventTime(hour: 8, minute: 0),
-            end: EventTime(hour: 10, minute: 0),
+            end: EventTime(hour: 8, minute: 30),
           ),
           AgendaEvent(
             title: 'Event Z',
@@ -75,6 +75,7 @@ class _AgendaScreenState extends State<AgendaScreen> {
     return SafeArea(
       child: Scaffold(
         body: AgendaView(
+          agendaStyle: AgendaStyle(timeItemHeight: 80),
           pillarList: pillars,
         ),
       ),

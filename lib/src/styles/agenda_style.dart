@@ -56,7 +56,7 @@ class AgendaStyle {
     this.timeItemTextColor: const Color(0xFF7B7B7B),
     this.pillarWidth: 200,
     this.pillarHeight: 40,
-    this.timeItemHeight: 60,
+    this.timeItemHeight: 80,
     this.timeItemWidth: 70,
     this.decorationLineHeight: 20,
     this.decorationLineDashWidth: 9,

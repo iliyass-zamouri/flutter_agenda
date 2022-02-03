@@ -32,8 +32,18 @@ class EventView extends StatelessWidget {
                       left: BorderSide(
                           color: event.backgroundColor,
                           width: agendaStyle.eventBorderWidth)))),
-          margin: event.margin,
+          // margin: event.start.hour == event.end.hour
+          //     ? event.end.minute - event.start.minute <= 30
+          //         ? EdgeInsets.zero
+          //         : EdgeInsets.all(4)
+          //     : event.margin,
+          // padding: event.start.hour == event.end.hour
+          //     ? event.end.minute - event.start.minute <= 30
+          //         ? EdgeInsets.zero
+          //         : EdgeInsets.all(4)
+          //     : event.padding,
           padding: event.padding,
+          margin: event.margin,
           child: (Utils.eventText)(
             event,
             context,
