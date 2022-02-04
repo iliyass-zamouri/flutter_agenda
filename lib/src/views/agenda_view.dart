@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_agenda/flutter_agenda.dart';
 import 'package:flutter_agenda/src/models/pillar.dart';
 import 'package:flutter_agenda/src/styles/agenda_style.dart';
 import 'package:flutter_agenda/src/utils/utils.dart';
@@ -10,11 +11,13 @@ import 'package:flutter_agenda/src/views/pillar_view.dart';
 
 class AgendaView extends StatefulWidget {
   final List<Pillar> pillarList;
+  final Function(EventTime, dynamic)? onClick;
   final AgendaStyle agendaStyle;
 
   AgendaView({
     Key? key,
     required this.pillarList,
+    this.onClick,
     this.agendaStyle: const AgendaStyle(),
   }) : super(key: key);
 
@@ -87,7 +90,9 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
           child: Row(
             children: widget.pillarList.map((pillar) {
               return PillarView(
+                headObject: pillar.head.object,
                 events: pillar.events,
+                callBack: (p0, p1) => widget.onClick!(p0, p1),
                 agendaStyle: widget.agendaStyle,
               );
             }).toList(),
@@ -190,21 +195,24 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
         controller: horizontalScrollController,
         shrinkWrap: true,
         children: widget.pillarList.map((pillar) {
-          return Container(
-            width: pillar.head.width,
-            height: pillar.head.height,
-            decoration: BoxDecoration(
-              color: pillar.head.backgroundColor,
-              border: Border(
-                  left: BorderSide(
-                      color: widget.agendaStyle.timelineBorderColor)),
-            ),
-            child: Center(
-              child: Text(
-                pillar.head.name,
-                style: pillar.head.textStyle
-                    .copyWith(color: pillar.head.textColor),
-                textAlign: TextAlign.center,
+          return GestureDetector(
+            onTap: () => pillar.head.onTap,
+            child: Container(
+              width: pillar.head.width,
+              height: pillar.head.height,
+              decoration: BoxDecoration(
+                color: pillar.head.backgroundColor,
+                border: Border(
+                    left: BorderSide(
+                        color: widget.agendaStyle.timelineBorderColor)),
+              ),
+              child: Center(
+                child: Text(
+                  pillar.head.name,
+                  style: pillar.head.textStyle
+                      .copyWith(color: pillar.head.textColor),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           );

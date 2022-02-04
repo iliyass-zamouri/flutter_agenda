@@ -33,49 +33,53 @@ class AgendaScreen extends StatefulWidget {
   _AgendaScreenState createState() => _AgendaScreenState();
 }
 
-late List<Pillar> pillars = <Pillar>[];
+late List<Pillar> resources = <Pillar>[];
 
 class _AgendaScreenState extends State<AgendaScreen> {
   @override
   void initState() {
     super.initState();
-    pillars = [
+    resources = [
       Pillar(
-        head: PillarHead(name: 'Pillar 1'.toUpperCase()),
+        head: PillarHead(name: 'Resource 1'.toUpperCase(), object: 1),
         events: [
           AgendaEvent(
-            title: 'Event D',
-            subtitle: 'CC',
+            title: 'Meeting D',
+            subtitle: 'MD',
             start: EventTime(hour: 8, minute: 0),
-            end: EventTime(hour: 10, minute: 0),
+            end: EventTime(hour: 8, minute: 30),
           ),
           AgendaEvent(
-            title: 'Event Z',
-            subtitle: 'SV',
+            title: 'Meeting Z',
+            subtitle: 'MZ',
             start: EventTime(hour: 12, minute: 0),
             end: EventTime(hour: 13, minute: 20),
           ),
         ],
       ),
       Pillar(
-        head: PillarHead(name: 'Pillar 2'.toUpperCase()),
+        head: PillarHead(name: 'Resource 2'.toUpperCase(), object: 2),
         events: [
           AgendaEvent(
-            title: 'Event G',
-            subtitle: 'FE',
+            title: 'Meeting G',
+            subtitle: 'MG',
             start: EventTime(hour: 9, minute: 10),
             end: EventTime(hour: 11, minute: 45),
           ),
         ],
       ),
       Pillar(
-        head: PillarHead(name: 'Pillar 3'.toUpperCase(), textColor: Colors.red),
+        head: PillarHead(
+            name: 'Resource 3'.toUpperCase(), object: 3, textColor: Colors.red),
         events: [
           AgendaEvent(
-            title: 'Event A',
-            subtitle: 'DE',
+            title: 'Meeting A',
+            subtitle: 'MA',
             start: EventTime(hour: 10, minute: 10),
             end: EventTime(hour: 11, minute: 45),
+            onTap: () {
+              print("meeting A Details");
+            },
           ),
         ],
       ),
@@ -87,7 +91,12 @@ class _AgendaScreenState extends State<AgendaScreen> {
     return SafeArea(
       child: Scaffold(
         body: AgendaView(
-          pillarList: pillars,
+          agendaStyle: AgendaStyle(timeItemHeight: 80),
+          pillarList: resources,
+          onClick: (eventTime, object) {
+            print("Clicked time: ${eventTime.hour}:${eventTime.minute}");
+            print("Head Object related to the resource: $object");
+          },
         ),
       ),
     );
