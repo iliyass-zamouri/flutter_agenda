@@ -6,11 +6,11 @@ Agenda Widget Package for Flutter
 
 ## Image
 
-<img src="images/flutter_agenda.png" width="400" />
+<img src="https://raw.githubusercontent.com/iliyass-zamouri/flutter_agenda/main/images/flutter_agenda.png" width="400" />
 
 ## Video Recording
 
-<img src="images/flutter_agenda.gif" height="440" />  
+<img src="https://raw.githubusercontent.com/iliyass-zamouri/flutter_agenda/main/images/flutter_agenda.gif" height="440" />  
 
 # Install
 
