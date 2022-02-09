@@ -23,7 +23,7 @@ and events as meetings during the day.
 
 ## Basic
 
-```
+```dart
 import 'package:flutter_agenda/flutter_agenda.dart';
 
 class AgendaScreen extends StatefulWidget {
@@ -91,10 +91,16 @@ class _AgendaScreenState extends State<AgendaScreen> {
     return SafeArea(
       child: Scaffold(
         body: AgendaView(
+          // the default view is timeItemHeight = 80 the timeline will be shown in 30 min view
+          // and if you  setState it 160 it will be the 15 min view
+          // or you can set it 60 and show an hourly timeline
           agendaStyle: AgendaStyle(timeItemHeight: 80),
           pillarList: resources,
-          onClick: (eventTime, object) {
-            print("Clicked time: ${eventTime.hour}:${eventTime.minute}");
+          // the click else where (other than an event because it has it's own onTap parameter)
+          // you get the object linked to the pillar which could be you project costume object
+          // and the cliked time
+          onClick: (clickedTime, object) {
+            print("Clicked time: ${clickedTime.hour}:${clickedTime.minute}");
             print("Head Object related to the resource: $object");
           },
         ),

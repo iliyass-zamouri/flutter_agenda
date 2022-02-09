@@ -9,7 +9,6 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^0.1.2
-# flutter_agenda: ^0.2.0
   flutter_agenda:
     path: ../
 

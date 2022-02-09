@@ -1,3 +1,6 @@
+## [1.0.5] - 2022-02-09
+
+* Add the 15 min view to the timeline.
 ## [1.0.4] - 2022-02-04
 
 * OnClick inside the agenda.

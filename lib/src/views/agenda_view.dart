@@ -156,7 +156,8 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
                         child: Text(
                           Utils.hourFormatter(hour, 30),
                           style: TextStyle(
-                              color: widget.agendaStyle.timeItemTextColor,
+                              color: widget.agendaStyle.timeItemTextColor
+                                  .withOpacity(0.6),
                               fontWeight: FontWeight.w700),
                           textAlign: TextAlign.right,
                         ),
@@ -166,13 +167,72 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
                         .seperate(widget.agendaStyle.timelineBorderColor)
                         .toList(),
                   )
-                : Text(
-                    Utils.hourFormatter(hour, 0),
-                    style: TextStyle(
-                        color: widget.agendaStyle.timeItemTextColor,
-                        fontWeight: FontWeight.w700),
-                    textAlign: TextAlign.right,
-                  ),
+                : widget.agendaStyle.timeItemHeight == 160
+                    ? Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 2, horizontal: 5),
+                            child: Text(
+                              Utils.hourFormatter(hour, 0),
+                              style: TextStyle(
+                                  color: widget.agendaStyle.timeItemTextColor,
+                                  fontWeight: FontWeight.w700),
+                              textAlign: TextAlign.right,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 2, horizontal: 5),
+                            child: Text(
+                              Utils.hourFormatter(hour, 15),
+                              style: TextStyle(
+                                  color: widget.agendaStyle.timeItemTextColor
+                                      .withOpacity(0.6),
+                                  fontWeight: FontWeight.w700),
+                              textAlign: TextAlign.right,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 2, horizontal: 5),
+                            child: Text(
+                              Utils.hourFormatter(hour, 30),
+                              style: TextStyle(
+                                  color: widget.agendaStyle.timeItemTextColor,
+                                  fontWeight: FontWeight.w700),
+                              textAlign: TextAlign.right,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 2, horizontal: 5),
+                            child: Text(
+                              Utils.hourFormatter(hour, 45),
+                              style: TextStyle(
+                                  color: widget.agendaStyle.timeItemTextColor
+                                      .withOpacity(0.6),
+                                  fontWeight: FontWeight.w700),
+                              textAlign: TextAlign.right,
+                            ),
+                          ),
+                        ]
+                            .expandEqually()
+                            .seperate(widget.agendaStyle.timelineBorderColor)
+                            .toList(),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Text(
+                          Utils.hourFormatter(hour, 0),
+                          style: TextStyle(
+                              color: widget.agendaStyle.timeItemTextColor,
+                              fontWeight: FontWeight.w700),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
           );
         }).toList(),
       ),

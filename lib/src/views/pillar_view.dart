@@ -9,7 +9,7 @@ class PillarView extends StatelessWidget {
   final dynamic headObject;
   final List<AgendaEvent> events;
   final AgendaStyle agendaStyle;
-  Function(EventTime, dynamic)? callBack;
+  final Function(EventTime, dynamic)? callBack;
 
   PillarView({
     Key? key,
