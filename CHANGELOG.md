@@ -1,3 +1,7 @@
+## [1.0.6] - 2022-02-10
+
+* Add border to the event.
+
 ## [1.0.5] - 2022-02-09
 
 * Add the 15 min view to the timeline.
