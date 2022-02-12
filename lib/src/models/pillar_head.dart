@@ -22,10 +22,10 @@ class PillarHead {
     this.object,
     this.onTap,
     this.height: 40,
-    this.width: 200,
+    this.width: 160,
     this.backgroundColor: Colors.white,
     this.textColor: const Color(0xFF323D6C),
-    this.textStyle:
-        const TextStyle(color: Color(0xFF323D6C), fontWeight: FontWeight.bold),
+    this.textStyle: const TextStyle(
+        color: Color(0xFF323D6C), fontWeight: FontWeight.w500, fontSize: 16),
   });
 }

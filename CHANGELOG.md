@@ -1,3 +1,6 @@
+## [1.0.7] - 2022-02-12
+
+* Design improvment.
 ## [1.0.6] - 2022-02-10
 
 * Add border to the event.

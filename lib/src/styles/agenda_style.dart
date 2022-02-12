@@ -17,13 +17,19 @@ class AgendaStyle {
 
   final Color mainBackgroundColor;
 
+  final double eventRadius;
+
   final Color timelineBorderColor;
+
+  final bool headBottomBorder;
+
+  // final Color eventBackgroundColor;
 
   final Color decorationLineBorderColor;
 
-  final double pillarWidth;
+  final double pillarHeadWidth;
 
-  final double pillarHeight;
+  final double pillarHeadHeight;
 
   final double timeItemHeight;
 
@@ -36,6 +42,8 @@ class AgendaStyle {
   final double eventBorderWidth;
 
   final bool pillarSeparator;
+
+  final TextStyle timeItemTextStyle;
 
   final double decorationLineDashSpaceWidth;
 
@@ -51,17 +59,22 @@ class AgendaStyle {
     this.timelineColor: Colors.white,
     this.timelineItemColor: Colors.white,
     this.mainBackgroundColor: Colors.white,
-    this.decorationLineBorderColor: const Color(0x1A000000),
-    this.timelineBorderColor: const Color(0xFFCECECE),
+    this.decorationLineBorderColor: const Color(0xFFCECECE),
+    // this.eventBackgroundColor: Colors.white,
+    this.headBottomBorder = true,
+    this.timelineBorderColor: const Color(0xFFE6E6E6),
     this.timeItemTextColor: const Color(0xFF7B7B7B),
-    this.pillarWidth: 200,
-    this.pillarHeight: 40,
+    this.eventRadius: 5,
+    this.timeItemTextStyle: const TextStyle(
+        color: Color(0xFFF999999), fontSize: 11, fontWeight: FontWeight.w300),
+    this.pillarHeadWidth: 160,
+    this.pillarHeadHeight: 50,
     this.timeItemHeight: 80,
     this.timeItemWidth: 70,
     this.decorationLineHeight: 20,
-    this.decorationLineDashWidth: 9,
+    this.decorationLineDashWidth: 4,
     this.decorationLineDashSpaceWidth: 4,
-    this.eventBorderWidth: 8,
+    this.eventBorderWidth: 4,
     this.visibleTimeBorder: true,
     this.pillarSeparator: true,
     this.visibleDecorationBorder: true,

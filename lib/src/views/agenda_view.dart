@@ -56,7 +56,7 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
       top: 0,
       child: SizedBox(
         width: widget.agendaStyle.timeItemWidth + 1,
-        height: widget.agendaStyle.pillarHeight,
+        height: widget.agendaStyle.pillarHeadHeight,
         child: DecoratedBox(
           decoration: BoxDecoration(
             color: widget.agendaStyle.cornerColor,
@@ -77,13 +77,13 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
     return Padding(
       padding: EdgeInsets.only(
         left: widget.agendaStyle.timeItemWidth,
-        top: widget.agendaStyle.pillarHeight,
+        top: widget.agendaStyle.pillarHeadHeight,
       ),
       child: DiagonalScrollView(
         horizontalPixelsStreamController: horizontalPixelsStream,
         verticalPixelsStreamController: verticalPixelsStream,
         onScroll: onScroll,
-        maxWidth: widget.pillarList.length * widget.agendaStyle.pillarWidth,
+        maxWidth: widget.pillarList.length * widget.agendaStyle.pillarHeadWidth,
         maxHeight: (widget.agendaStyle.endHour - widget.agendaStyle.startHour) *
             widget.agendaStyle.timeItemHeight,
         child: IntrinsicHeight(
@@ -106,7 +106,7 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
     return Container(
       alignment: Alignment.topLeft,
       width: widget.agendaStyle.timeItemWidth + 1,
-      padding: EdgeInsets.only(top: widget.agendaStyle.pillarHeight),
+      padding: EdgeInsets.only(top: widget.agendaStyle.pillarHeadHeight),
       decoration: BoxDecoration(
         color: widget.agendaStyle.timelineColor,
         border: Border(
@@ -144,9 +144,8 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
                             EdgeInsets.symmetric(vertical: 2, horizontal: 5),
                         child: Text(
                           Utils.hourFormatter(hour, 0),
-                          style: TextStyle(
-                              color: widget.agendaStyle.timeItemTextColor,
-                              fontWeight: FontWeight.w700),
+                          style: widget.agendaStyle.timeItemTextStyle.copyWith(
+                              color: widget.agendaStyle.timeItemTextColor),
                           textAlign: TextAlign.right,
                         ),
                       ),
@@ -155,10 +154,8 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
                             EdgeInsets.symmetric(vertical: 2, horizontal: 5),
                         child: Text(
                           Utils.hourFormatter(hour, 30),
-                          style: TextStyle(
-                              color: widget.agendaStyle.timeItemTextColor
-                                  .withOpacity(0.6),
-                              fontWeight: FontWeight.w700),
+                          style: widget.agendaStyle.timeItemTextStyle.copyWith(
+                              color: widget.agendaStyle.timeItemTextColor),
                           textAlign: TextAlign.right,
                         ),
                       ),
@@ -177,9 +174,10 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
                                 vertical: 2, horizontal: 5),
                             child: Text(
                               Utils.hourFormatter(hour, 0),
-                              style: TextStyle(
-                                  color: widget.agendaStyle.timeItemTextColor,
-                                  fontWeight: FontWeight.w700),
+                              style: widget.agendaStyle.timeItemTextStyle
+                                  .copyWith(
+                                      color:
+                                          widget.agendaStyle.timeItemTextColor),
                               textAlign: TextAlign.right,
                             ),
                           ),
@@ -188,10 +186,10 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
                                 vertical: 2, horizontal: 5),
                             child: Text(
                               Utils.hourFormatter(hour, 15),
-                              style: TextStyle(
-                                  color: widget.agendaStyle.timeItemTextColor
-                                      .withOpacity(0.6),
-                                  fontWeight: FontWeight.w700),
+                              style: widget.agendaStyle.timeItemTextStyle
+                                  .copyWith(
+                                      color:
+                                          widget.agendaStyle.timeItemTextColor),
                               textAlign: TextAlign.right,
                             ),
                           ),
@@ -200,9 +198,10 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
                                 vertical: 2, horizontal: 5),
                             child: Text(
                               Utils.hourFormatter(hour, 30),
-                              style: TextStyle(
-                                  color: widget.agendaStyle.timeItemTextColor,
-                                  fontWeight: FontWeight.w700),
+                              style: widget.agendaStyle.timeItemTextStyle
+                                  .copyWith(
+                                      color:
+                                          widget.agendaStyle.timeItemTextColor),
                               textAlign: TextAlign.right,
                             ),
                           ),
@@ -211,10 +210,10 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
                                 vertical: 2, horizontal: 5),
                             child: Text(
                               Utils.hourFormatter(hour, 45),
-                              style: TextStyle(
-                                  color: widget.agendaStyle.timeItemTextColor
-                                      .withOpacity(0.6),
-                                  fontWeight: FontWeight.w700),
+                              style: widget.agendaStyle.timeItemTextStyle
+                                  .copyWith(
+                                      color:
+                                          widget.agendaStyle.timeItemTextColor),
                               textAlign: TextAlign.right,
                             ),
                           ),
@@ -227,9 +226,8 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
                         padding: const EdgeInsets.all(5.0),
                         child: Text(
                           Utils.hourFormatter(hour, 0),
-                          style: TextStyle(
-                              color: widget.agendaStyle.timeItemTextColor,
-                              fontWeight: FontWeight.w700),
+                          style: widget.agendaStyle.timeItemTextStyle.copyWith(
+                              color: widget.agendaStyle.timeItemTextColor),
                           textAlign: TextAlign.right,
                         ),
                       ),
@@ -244,10 +242,13 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
       alignment: Alignment.topLeft,
       decoration: BoxDecoration(
         color: widget.agendaStyle.pillarColor,
-        border: Border(
-            bottom: BorderSide(color: widget.agendaStyle.timelineBorderColor)),
+        border: !widget.agendaStyle.headBottomBorder
+            ? null
+            : Border(
+                bottom:
+                    BorderSide(color: widget.agendaStyle.timelineBorderColor)),
       ),
-      height: widget.agendaStyle.pillarHeight,
+      height: widget.agendaStyle.pillarHeadHeight,
       padding: EdgeInsets.only(left: widget.agendaStyle.timeItemWidth),
       child: ListView(
         scrollDirection: Axis.horizontal,

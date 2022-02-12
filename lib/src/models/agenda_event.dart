@@ -33,9 +33,9 @@ class AgendaEvent {
     this.margin,
     this.onTap,
     this.decoration,
-    this.backgroundColor: const Color(0xCC2196F3),
-    this.textStyle:
-        const TextStyle(color: Color(0xFF535353), fontWeight: FontWeight.w400),
+    this.backgroundColor: const Color(0xFF323D6C),
+    this.textStyle: const TextStyle(
+        color: Color(0xFF535353), fontSize: 11, fontWeight: FontWeight.w400),
     this.subtitleStyle:
         const TextStyle(fontWeight: FontWeight.w800, color: Color(0xFF363636)),
   }) : assert(end.isAfter(start));

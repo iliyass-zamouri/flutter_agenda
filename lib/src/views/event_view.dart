@@ -21,41 +21,34 @@ class EventView extends StatelessWidget {
       top: top(),
       height: height(),
       left: 0,
-      width: agendaStyle.pillarWidth,
+      width: agendaStyle.pillarHeadWidth,
       child: GestureDetector(
         onTap: event.onTap,
-        child: Container(
-          decoration: event.decoration ??
-              (BoxDecoration(
-                  color: Color(0xFFFAFAFA),
-                  border: Border(
-                    left: BorderSide(
-                        color: event.backgroundColor,
-                        width: agendaStyle.eventBorderWidth),
-                    bottom: BorderSide(color: Color(0xFF7B7B7B)),
-                  ))),
-          // margin: event.start.hour == event.end.hour
-          //     ? event.end.minute - event.start.minute <= 30
-          //         ? EdgeInsets.zero
-          //         : EdgeInsets.all(4)
-          //     : event.margin,
-          // padding: event.start.hour == event.end.hour
-          //     ? event.end.minute - event.start.minute <= 30
-          //         ? EdgeInsets.zero
-          //         : EdgeInsets.all(4)
-          //     : event.padding,
-          padding: event.padding,
-          margin: event.margin,
-          child: (Utils.eventText)(
-            event,
-            context,
-            math.max(
-                0.0, height() - (event.padding.top) - (event.padding.bottom)),
-            math.max(
-                0.0,
-                agendaStyle.pillarWidth -
-                    (event.padding.left) -
-                    (event.padding.right)),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(agendaStyle.eventRadius),
+          child: Container(
+            decoration: event.decoration ??
+                (BoxDecoration(
+                    color: event.backgroundColor.withOpacity(0.1),
+                    border: Border(
+                      left: BorderSide(
+                          color: event.backgroundColor,
+                          width: agendaStyle.eventBorderWidth),
+                      bottom: BorderSide(color: Color(0xFFBCBCBC)),
+                    ))),
+            padding: event.padding,
+            margin: event.margin,
+            child: (Utils.eventText)(
+              event,
+              context,
+              math.max(
+                  0.0, height() - (event.padding.top) - (event.padding.bottom)),
+              math.max(
+                  0.0,
+                  agendaStyle.pillarHeadWidth -
+                      (event.padding.left) -
+                      (event.padding.right)),
+            ),
           ),
         ),
       ),
