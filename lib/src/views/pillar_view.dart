@@ -29,7 +29,7 @@ class PillarView extends StatelessWidget {
       child: Container(
         height: height(),
         width: agendaStyle.pillarHeadWidth,
-        decoration: agendaStyle.pillarSeparator
+        decoration: agendaStyle.headSeperator
             ? BoxDecoration(
                 border: Border(left: BorderSide(color: Color(0xFFCECECE))))
             : BoxDecoration(),

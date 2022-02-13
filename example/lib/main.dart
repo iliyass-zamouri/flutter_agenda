@@ -29,7 +29,8 @@ class _AgendaScreenState extends State<AgendaScreen> {
     super.initState();
     resources = [
       Pillar(
-        head: PillarHead(name: 'Resource 1', object: 1),
+        head: PillarHead(
+            title: 'Resource 1', subtitle: '3 Appointments', object: 1),
         events: [
           AgendaEvent(
             title: 'Meeting D',
@@ -47,19 +48,19 @@ class _AgendaScreenState extends State<AgendaScreen> {
         ],
       ),
       Pillar(
-        head: PillarHead(name: 'Resource 2'.toUpperCase(), object: 2),
+        head: PillarHead(title: 'Resource 2', object: 2),
         events: [
           AgendaEvent(
             title: 'Meeting G',
             subtitle: 'MG',
+            backgroundColor: Colors.yellowAccent,
             start: EventTime(hour: 9, minute: 10),
             end: EventTime(hour: 11, minute: 45),
           ),
         ],
       ),
       Pillar(
-        head: PillarHead(
-            name: 'Resource 3'.toUpperCase(), object: 3, textColor: Colors.red),
+        head: PillarHead(title: 'Resource 3', object: 3, color: Colors.yellow),
         events: [
           AgendaEvent(
             title: 'Meeting A',
@@ -84,12 +85,13 @@ class _AgendaScreenState extends State<AgendaScreen> {
           // and if you  setState it 160 it will be the 15 min view
           // or you can set it 60 and show an hourly timeline
           agendaStyle: AgendaStyle(
-              startHour: 9,
-              endHour: 20,
-              pillarSeparator: false,
-              visibleTimeBorder: false,
-              timeItemWidth: 40,
-              timeItemHeight: 60),
+            startHour: 9,
+            endHour: 20,
+            pillarSeperator: false,
+            visibleTimeBorder: true,
+            timeItemWidth: 40,
+            timeItemHeight: 160,
+          ),
           pillarList: resources,
           // the click else where (other than an event because it has it's own onTap parameter)
           // you get the object linked to the head object of the pillar which could be you project costume object

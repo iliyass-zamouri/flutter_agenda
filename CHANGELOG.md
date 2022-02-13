@@ -1,3 +1,7 @@
+## [1.0.8] - 2022-02-13
+
+* Head subtitle + Avatar.
+
 ## [1.0.7] - 2022-02-12
 
 * Design improvment.

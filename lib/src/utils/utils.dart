@@ -31,6 +31,10 @@ class Utils {
     return _addLeadingZero(hour) + ':' + _addLeadingZero(minute);
   }
 
+  static String minFormatter(int minute) {
+    return _addLeadingZero(minute);
+  }
+
   static Widget eventText(
     AgendaEvent event,
     BuildContext context,

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class PillarHead {
-  final String name;
+  final String title;
+
+  final String? subtitle;
 
   final dynamic object;
 
@@ -15,17 +17,22 @@ class PillarHead {
 
   final TextStyle textStyle;
 
-  final Color textColor;
+  final TextStyle subtitleStyle;
+
+  final Color color;
 
   PillarHead({
-    required this.name,
+    required this.title,
+    this.subtitle,
     this.object,
     this.onTap,
     this.height: 40,
     this.width: 160,
     this.backgroundColor: Colors.white,
-    this.textColor: const Color(0xFF323D6C),
+    this.color: const Color(0xFF292B2F),
     this.textStyle: const TextStyle(
-        color: Color(0xFF323D6C), fontWeight: FontWeight.w500, fontSize: 16),
+        color: Colors.black, fontWeight: FontWeight.w400, fontSize: 13),
+    this.subtitleStyle: const TextStyle(
+        color: Color(0xFFA1A1A0), fontWeight: FontWeight.w300, fontSize: 10),
   });
 }

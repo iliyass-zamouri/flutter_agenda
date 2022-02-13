@@ -9,6 +9,10 @@ class AgendaStyle {
 
   final Color cornerColor;
 
+  final bool cornerBottom;
+
+  final bool cornerRight;
+
   final Color timeItemTextColor;
 
   final Color timelineColor;
@@ -29,6 +33,10 @@ class AgendaStyle {
 
   final double pillarHeadWidth;
 
+  final bool headSeperator;
+
+  final bool pillarSeperator;
+
   final double pillarHeadHeight;
 
   final double timeItemHeight;
@@ -41,8 +49,6 @@ class AgendaStyle {
 
   final double eventBorderWidth;
 
-  final bool pillarSeparator;
-
   final TextStyle timeItemTextStyle;
 
   final double decorationLineDashSpaceWidth;
@@ -54,10 +60,14 @@ class AgendaStyle {
   const AgendaStyle({
     this.startHour: 0,
     this.endHour: 24,
+    this.cornerBottom: true,
+    this.cornerRight: false,
     this.pillarColor: Colors.white,
     this.cornerColor: Colors.white,
     this.timelineColor: Colors.white,
     this.timelineItemColor: Colors.white,
+    this.headSeperator: false,
+    this.pillarSeperator: true,
     this.mainBackgroundColor: Colors.white,
     this.decorationLineBorderColor: const Color(0xFFCECECE),
     // this.eventBackgroundColor: Colors.white,
@@ -76,7 +86,6 @@ class AgendaStyle {
     this.decorationLineDashSpaceWidth: 4,
     this.eventBorderWidth: 4,
     this.visibleTimeBorder: true,
-    this.pillarSeparator: true,
     this.visibleDecorationBorder: true,
   });
 }

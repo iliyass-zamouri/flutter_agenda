@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_agenda/flutter_agenda.dart';
 import 'package:flutter_agenda/src/models/pillar.dart';
@@ -61,12 +63,16 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
           decoration: BoxDecoration(
             color: widget.agendaStyle.cornerColor,
             border: Border(
-                right: BorderSide(
-                  color: widget.agendaStyle.timelineBorderColor,
-                ),
-                bottom: BorderSide(
-                  color: widget.agendaStyle.timelineBorderColor,
-                )),
+                right: !widget.agendaStyle.cornerRight
+                    ? BorderSide.none
+                    : BorderSide(
+                        color: widget.agendaStyle.timelineBorderColor,
+                      ),
+                bottom: !widget.agendaStyle.cornerBottom
+                    ? BorderSide.none
+                    : BorderSide(
+                        color: widget.agendaStyle.timelineBorderColor,
+                      )),
           ),
         ),
       ),
@@ -145,7 +151,8 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
                         child: Text(
                           Utils.hourFormatter(hour, 0),
                           style: widget.agendaStyle.timeItemTextStyle.copyWith(
-                              color: widget.agendaStyle.timeItemTextColor),
+                              color: widget.agendaStyle.timeItemTextColor,
+                              fontWeight: FontWeight.w400),
                           textAlign: TextAlign.right,
                         ),
                       ),
@@ -153,7 +160,7 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
                         padding:
                             EdgeInsets.symmetric(vertical: 2, horizontal: 5),
                         child: Text(
-                          Utils.hourFormatter(hour, 30),
+                          Utils.minFormatter(30),
                           style: widget.agendaStyle.timeItemTextStyle.copyWith(
                               color: widget.agendaStyle.timeItemTextColor),
                           textAlign: TextAlign.right,
@@ -177,7 +184,8 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
                               style: widget.agendaStyle.timeItemTextStyle
                                   .copyWith(
                                       color:
-                                          widget.agendaStyle.timeItemTextColor),
+                                          widget.agendaStyle.timeItemTextColor,
+                                      fontWeight: FontWeight.w400),
                               textAlign: TextAlign.right,
                             ),
                           ),
@@ -185,7 +193,7 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
                             padding: EdgeInsets.symmetric(
                                 vertical: 2, horizontal: 5),
                             child: Text(
-                              Utils.hourFormatter(hour, 15),
+                              Utils.minFormatter(15),
                               style: widget.agendaStyle.timeItemTextStyle
                                   .copyWith(
                                       color:
@@ -197,7 +205,7 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
                             padding: EdgeInsets.symmetric(
                                 vertical: 2, horizontal: 5),
                             child: Text(
-                              Utils.hourFormatter(hour, 30),
+                              Utils.minFormatter(30),
                               style: widget.agendaStyle.timeItemTextStyle
                                   .copyWith(
                                       color:
@@ -209,7 +217,7 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
                             padding: EdgeInsets.symmetric(
                                 vertical: 2, horizontal: 5),
                             child: Text(
-                              Utils.hourFormatter(hour, 45),
+                              Utils.minFormatter(45),
                               style: widget.agendaStyle.timeItemTextStyle
                                   .copyWith(
                                       color:
@@ -227,7 +235,8 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
                         child: Text(
                           Utils.hourFormatter(hour, 0),
                           style: widget.agendaStyle.timeItemTextStyle.copyWith(
-                              color: widget.agendaStyle.timeItemTextColor),
+                              color: widget.agendaStyle.timeItemTextColor,
+                              fontWeight: FontWeight.w400),
                           textAlign: TextAlign.right,
                         ),
                       ),
@@ -263,16 +272,72 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
               height: pillar.head.height,
               decoration: BoxDecoration(
                 color: pillar.head.backgroundColor,
-                border: Border(
-                    left: BorderSide(
-                        color: widget.agendaStyle.timelineBorderColor)),
+                border: !widget.agendaStyle.pillarSeperator
+                    ? null
+                    : Border(
+                        left: BorderSide(
+                            color: widget.agendaStyle.timelineBorderColor)),
               ),
               child: Center(
-                child: Text(
-                  pillar.head.name,
-                  style: pillar.head.textStyle
-                      .copyWith(color: pillar.head.textColor),
-                  textAlign: TextAlign.center,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                      child: Material(
+                        color: pillar.head.color.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(50),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(
+                              sigmaX: 20.0,
+                              sigmaY: 7.0,
+                            ),
+                            child: Container(
+                              width: widget.agendaStyle.pillarHeadHeight - 10,
+                              decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  pillar.head.title
+                                      .substring(0, 1)
+                                      .toUpperCase(),
+                                  style: pillar.head.textStyle
+                                      .copyWith(fontSize: 14),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    pillar.head.subtitle != null
+                        ? Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                pillar.head.title,
+                                style: pillar.head.textStyle,
+                                textAlign: TextAlign.center,
+                              ),
+                              Text(
+                                pillar.head.subtitle ?? '',
+                                style: pillar.head.subtitleStyle,
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          )
+                        : Text(
+                            pillar.head.title,
+                            style: pillar.head.textStyle,
+                            textAlign: TextAlign.center,
+                          ),
+                  ],
                 ),
               ),
             ),
