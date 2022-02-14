@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_agenda/flutter_agenda.dart';
 import 'package:flutter_agenda/src/models/agenda_event.dart';
@@ -22,7 +23,7 @@ class PillarView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTapDown: (TapDownDetails tapdetails) => callBack!(
+      onLongPressEnd: (tapdetails) => callBack!(
           tappedHour(tapdetails.localPosition.dy, agendaStyle.timeItemHeight,
               agendaStyle.startHour),
           headObject),

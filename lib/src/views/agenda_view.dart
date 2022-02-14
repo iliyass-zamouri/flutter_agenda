@@ -13,13 +13,13 @@ import 'package:flutter_agenda/src/views/pillar_view.dart';
 
 class AgendaView extends StatefulWidget {
   final List<Pillar> pillarList;
-  final Function(EventTime, dynamic)? onClick;
+  final Function(EventTime, dynamic)? onLongPress;
   final AgendaStyle agendaStyle;
 
   AgendaView({
     Key? key,
     required this.pillarList,
-    this.onClick,
+    this.onLongPress,
     this.agendaStyle: const AgendaStyle(),
   }) : super(key: key);
 
@@ -98,7 +98,7 @@ class _AgendaViewState extends State<AgendaView> with AgendaViewController {
               return PillarView(
                 headObject: pillar.head.object,
                 events: pillar.events,
-                callBack: (p0, p1) => widget.onClick!(p0, p1),
+                callBack: (p0, p1) => widget.onLongPress!(p0, p1),
                 agendaStyle: widget.agendaStyle,
               );
             }).toList(),
