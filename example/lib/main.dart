@@ -96,7 +96,7 @@ class _AgendaScreenState extends State<AgendaScreen> {
           // the click else where (other than an event because it has it's own onTap parameter)
           // you get the object linked to the head object of the pillar which could be you project costume object
           // and the cliked time
-          onClick: (clickedTime, object) {
+          onLongPress: (clickedTime, object) {
             print("Clicked time: ${clickedTime.hour}:${clickedTime.minute}");
             print("Head Object related to the resource: $object");
           },
