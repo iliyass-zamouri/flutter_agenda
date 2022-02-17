@@ -198,11 +198,9 @@ Event Customizations
 
 # Contributing
 
-1. Fork it
-2. Create your feature branch (git checkout -b new_feature_branch)
-3. Commit your changes (git commit -am 'Add some feature')
-4. Push to the branch (git push origin new_feature_branch)
-5. Create new Pull Request
+Unfotuanatly you can't contribute to the develepment of this flutter plugin, 
+due to it's being used in a production level project. but feel free to report an issue,
+or request an update of a functionality.
 
 # License
 
