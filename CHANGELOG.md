@@ -1,3 +1,7 @@
+## [2.0.0] - 2022-02-17
+
+* Documentation and fixes.
+
 ## [1.0.9] - 2022-02-14
 
 * Changing to longPressDown (fix tap issue).

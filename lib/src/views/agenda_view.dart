@@ -12,16 +12,31 @@ import 'package:flutter_agenda/src/views/diagonal_scroll_view.dart';
 import 'package:flutter_agenda/src/views/pillar_view.dart';
 
 class AgendaView extends StatefulWidget {
-  final List<Pillar> pillarList;
-  final Function(EventTime, dynamic)? onLongPress;
-  final AgendaStyle agendaStyle;
-
+  /// Agenda visualization only one required parameter [pillarsList].
   AgendaView({
     Key? key,
     required this.pillarList,
     this.onLongPress,
     this.agendaStyle: const AgendaStyle(),
   }) : super(key: key);
+
+  /// list of pillar Object:
+  ///
+  /// [head] employee/resource.
+  ///
+  /// [events] (appointments/Todos) linked to the head.
+  final List<Pillar> pillarList;
+
+  /// longpress callback in an empty space in the calendar.
+  ///
+  /// gives the exact Clicked [eventTime].
+  ///
+  /// the dynamic object is the object you passed to the head object.
+  /// it could be one of your won project custom resource object.
+  final Function(EventTime, dynamic)? onLongPress;
+
+  /// if you want to customize the view more
+  final AgendaStyle agendaStyle;
 
   @override
   _AgendaViewState createState() => _AgendaViewState();

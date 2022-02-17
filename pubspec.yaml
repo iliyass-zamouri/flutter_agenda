@@ -1,6 +1,6 @@
 name: flutter_agenda
-description: Agenda Widget Package for Flutter
-version: 1.0.9
+description: Agenda view package with diagnol scrolling, vertical timeline, horizontal resources and auto rendering for thier appoiments.
+version: 2.0.0
 homepage: https://github.com/iliyass-zamouri/flutter_agenda
 
 environment:
@@ -13,3 +13,4 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  lints: ^1.0.1
