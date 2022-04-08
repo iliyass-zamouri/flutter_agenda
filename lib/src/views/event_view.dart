@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_agenda/src/models/agenda_event.dart';
+import 'package:flutter_agenda/src/models/time_slot.dart';
 import 'package:flutter_agenda/src/styles/agenda_style.dart';
 import 'package:flutter_agenda/src/utils/utils.dart';
 
@@ -21,7 +22,7 @@ class EventView extends StatelessWidget {
       top: top(),
       height: height(),
       left: 0,
-      width: agendaStyle.pillarHeadWidth,
+      width: agendaStyle.pillarWidth,
       child: GestureDetector(
         onTap: event.onTap,
         child: ClipRRect(
@@ -45,7 +46,7 @@ class EventView extends StatelessWidget {
                   0.0, height() - (event.padding.top) - (event.padding.bottom)),
               math.max(
                   0.0,
-                  agendaStyle.pillarHeadWidth -
+                  agendaStyle.pillarWidth -
                       (event.padding.left) -
                       (event.padding.right)),
             ),
@@ -57,13 +58,13 @@ class EventView extends StatelessWidget {
 
   double top() {
     return calculateTopOffset(
-            event.start.hour, event.start.minute, agendaStyle.timeItemHeight) -
-        agendaStyle.startHour * agendaStyle.timeItemHeight;
+            event.start.hour, event.start.minute, agendaStyle.timeSlot.height) -
+        agendaStyle.startHour * agendaStyle.timeSlot.height;
   }
 
   double height() {
     return calculateTopOffset(0, event.end.difference(event.start).inMinutes,
-            agendaStyle.timeItemHeight) +
+            agendaStyle.timeSlot.height) +
         1;
   }
 

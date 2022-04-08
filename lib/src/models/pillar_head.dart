@@ -11,8 +11,6 @@ class PillarHead {
 
   final double height;
 
-  final double width;
-
   final Color backgroundColor;
 
   final TextStyle textStyle;
@@ -27,7 +25,6 @@ class PillarHead {
     this.object,
     this.onTap,
     this.height: 40,
-    this.width: 160,
     this.backgroundColor: Colors.white,
     this.color: const Color(0xFF292B2F),
     this.textStyle: const TextStyle(
