@@ -3,7 +3,8 @@ import 'package:flutter_agenda/src/models/header_logo.dart';
 import 'package:flutter_agenda/src/models/time_slot.dart';
 
 class AgendaStyle {
-  /// Customizing the agenda view to match you own UI approach.
+  /// Customize the agenda to match you own UI approach.
+  /// by defaut the styles are great but you can change them.
   const AgendaStyle({
     this.startHour: 0,
     this.endHour: 24,
@@ -17,7 +18,6 @@ class AgendaStyle {
     this.pillarSeperator: false,
     this.mainBackgroundColor: Colors.white,
     this.decorationLineBorderColor: const Color(0xFFCECECE),
-    // this.eventBackgroundColor: Colors.white,
     this.headBottomBorder = true,
     this.fittedWidth = true,
     this.timelineBorderColor: const Color(0xFF7F7F7F),
@@ -48,31 +48,41 @@ class AgendaStyle {
   /// it doesn't support period format.
   final int endHour;
 
+  /// pillar color.
   final Color pillarColor;
 
+  /// the style of the header logo
   final HeaderLogo headerLogo;
 
+  /// the top left corner color
   final Color cornerColor;
 
+  /// the is corner bottom border is active
   final bool cornerBottom;
 
+  /// the is corner right border is active
   final bool cornerRight;
 
+  /// the time item [hour] text color
   final Color timeItemTextColor;
 
+  /// the time line color
   final Color timelineColor;
 
+  /// the time line item color
   final Color timelineItemColor;
 
+  /// main body background color
   final Color mainBackgroundColor;
 
+  /// event border Radius
   final double eventRadius;
 
+  /// the time line border color
   final Color timelineBorderColor;
 
+  /// head bottom border
   final bool headBottomBorder;
-
-  // final Color eventBackgroundColor;
 
   final Color decorationLineBorderColor;
 
@@ -102,19 +112,27 @@ class AgendaStyle {
   /// you get a 60 height time slot
   final TimeSlot timeSlot;
 
+  /// the time item width
   final double timeItemWidth;
 
+  /// decoration line height
   final double decorationLineHeight;
 
+  /// decoration line dash width
   final double decorationLineDashWidth;
 
+  /// event left border width
   final double eventBorderWidth;
 
+  /// time item text style
   final TextStyle timeItemTextStyle;
 
+  /// decoration line dash space width
   final double decorationLineDashSpaceWidth;
 
+  /// visible time border
   final bool visibleTimeBorder;
 
+  /// visible decoration border
   final bool visibleDecorationBorder;
 }

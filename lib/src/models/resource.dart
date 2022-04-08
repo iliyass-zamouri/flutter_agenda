@@ -1,7 +1,7 @@
 import 'package:flutter_agenda/src/models/header.dart';
 import 'package:flutter_agenda/src/models/agenda_event.dart';
 
-class Pillar {
+class Resource {
   /// Pillar object helps link the resource with his appointments.
 
   /// [head] employee/resource.
@@ -10,7 +10,7 @@ class Pillar {
   /// [events] (appointments/Todos) linked to the head.
   final List<AgendaEvent> events;
 
-  Pillar({
+  Resource({
     required this.head,
     required this.events,
   });

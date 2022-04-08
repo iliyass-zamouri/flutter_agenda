@@ -1,6 +1,10 @@
-## [3.0.0] - 2022-04-08
+## [3.0.1] - 2022-04-08
+* Better docs. & args naming.
 
+
+## [3.0.0] - 2022-04-08
 * Integrating bidirectional scrolling
+
 ## [2.0.0] - 2022-02-18
 
 * Documentation and fixes.

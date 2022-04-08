@@ -21,14 +21,14 @@ class AgendaScreen extends StatefulWidget {
   _AgendaScreenState createState() => _AgendaScreenState();
 }
 
-late List<Pillar> resources = <Pillar>[];
+late List<Resource> resources = <Resource>[];
 
 class _AgendaScreenState extends State<AgendaScreen> {
   @override
   void initState() {
     super.initState();
     resources = [
-      Pillar(
+      Resource(
         head:
             Header(title: 'Resource 1', subtitle: '3 Appointments', object: 1),
         events: [
@@ -47,7 +47,7 @@ class _AgendaScreenState extends State<AgendaScreen> {
           ),
         ],
       ),
-      Pillar(
+      Resource(
         head: Header(title: 'Resource 2', object: 2),
         events: [
           AgendaEvent(
@@ -59,7 +59,7 @@ class _AgendaScreenState extends State<AgendaScreen> {
           ),
         ],
       ),
-      Pillar(
+      Resource(
         head: Header(title: 'Resource 3', object: 3, color: Colors.yellow),
         events: [
           AgendaEvent(

@@ -2,8 +2,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_agenda/flutter_agenda.dart';
 import 'package:flutter_agenda/src/controllers/scroll_linker.dart';
-import 'package:flutter_agenda/src/models/header_logo.dart';
-import 'package:flutter_agenda/src/models/time_slot.dart';
 import 'package:flutter_agenda/src/utils/scroll_config.dart';
 import 'package:flutter_agenda/src/utils/utils.dart';
 import 'package:flutter_agenda/src/extensions/expand_equally.dart';
@@ -24,7 +22,7 @@ class FlutterAgenda extends StatefulWidget {
   /// [head] employee/resource.
   ///
   /// [events] (appointments/Todos) linked to the head.
-  final List<Pillar> resources;
+  final List<Resource> resources;
 
   /// longpress callback in an empty space in the calendar.
   ///
