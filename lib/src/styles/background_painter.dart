@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_agenda/src/models/time_slot.dart';
 import 'package:flutter_agenda/src/styles/agenda_style.dart';
 
 class BackgroundPainter extends CustomPainter {
@@ -53,7 +54,7 @@ class BackgroundPainter extends CustomPainter {
             oldDayViewBackgroundPainter.agendaStyle.timelineBorderColor);
   }
 
-  double calculateTopOffset(int hour) => hour * agendaStyle.timeItemHeight;
+  double calculateTopOffset(int hour) => hour * agendaStyle.timeSlot.height;
 
   double calculateDecorationLineOffset(double count) =>
       count * agendaStyle.decorationLineHeight;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_agenda/src/models/time_slot.dart';
 
 class AgendaStyle {
   /// Customizing the agenda view to match you own UI approach.
@@ -22,9 +23,9 @@ class AgendaStyle {
     this.eventRadius: 5,
     this.timeItemTextStyle: const TextStyle(
         color: Color(0xFFF999999), fontSize: 11, fontWeight: FontWeight.w300),
-    this.pillarHeadWidth: 160,
+    this.pillarWidth: 200,
     this.pillarHeadHeight: 50,
-    this.timeItemHeight: 80,
+    this.timeSlot: TimeSlot.half,
     this.timeItemWidth: 70,
     this.decorationLineHeight: 20,
     this.decorationLineDashWidth: 4,
@@ -70,7 +71,7 @@ class AgendaStyle {
 
   final Color decorationLineBorderColor;
 
-  final double pillarHeadWidth;
+  final double pillarWidth;
 
   final bool headSeperator;
 
@@ -78,19 +79,20 @@ class AgendaStyle {
 
   final double pillarHeadHeight;
 
-  /// this timelineHeight is so important.
+  /// this timeSlot is so important.
   ///
-  /// timeItemHeight = 160
+  /// - TimeSlot.full: 15min timeline view.
   ///
-  /// you get a 15min timeline view.
+  /// you get a 160 height time slot
   ///
-  /// timeItemHeight = 80
+  /// - TimeSlot.half: 30min timeline view
   ///
-  /// you get a 30min timeline view.
+  /// you get a 80 height time slot
   ///
-  /// timeItemHeight = 60
-  /// you get a 1h timeline view
-  final double timeItemHeight;
+  /// - TimeSlot.quarter: 1h timeline view
+  ///
+  /// you get a 60 height time slot
+  final TimeSlot timeSlot;
 
   final double timeItemWidth;
 
