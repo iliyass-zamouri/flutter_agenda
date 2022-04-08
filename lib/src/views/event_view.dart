@@ -8,11 +8,13 @@ import 'package:flutter_agenda/src/utils/utils.dart';
 
 class EventView extends StatelessWidget {
   final AgendaEvent event;
+  final int lenght;
   final AgendaStyle agendaStyle;
 
   const EventView({
     Key? key,
     required this.event,
+    required this.lenght,
     required this.agendaStyle,
   }) : super(key: key);
 
@@ -22,7 +24,10 @@ class EventView extends StatelessWidget {
       top: top(),
       height: height(),
       left: 0,
-      width: agendaStyle.pillarWidth,
+      width: agendaStyle.fittedWidth
+          ? Utils.pillarWidth(lenght, agendaStyle.timeItemWidth,
+              agendaStyle.pillarWidth, MediaQuery.of(context).orientation)
+          : agendaStyle.pillarWidth,
       child: GestureDetector(
         onTap: event.onTap,
         child: ClipRRect(
@@ -30,7 +35,7 @@ class EventView extends StatelessWidget {
           child: Container(
             decoration: event.decoration ??
                 (BoxDecoration(
-                    color: event.backgroundColor.withOpacity(0.1),
+                    color: event.backgroundColor.withOpacity(0.38),
                     border: Border(
                       left: BorderSide(
                           color: event.backgroundColor,

@@ -4,17 +4,10 @@
 
 Agenda Widget Package for Flutter. diagonal scrolling, beautiful UI, responsive to different screen viewports, OnPressed events, custom styling.
 
-# Features
+# Show case
 
 <img src="https://raw.githubusercontent.com/iliyass-zamouri/flutter_agenda/main/images/flutter_agenda.png" width="400" />
 <img src="https://raw.githubusercontent.com/iliyass-zamouri/flutter_agenda/main/images/flutter_agenda.gif" height="440" />  
-
-# Usage
-
-- Visualize resources and thier meetings.
-- Visualize resources and thier todos.
-
-Use you imagination 😅.
 
 # Install
 
@@ -30,20 +23,18 @@ import 'package:flutter_agenda/flutter_agenda.dart';
 ## How to use it
 
 ```dart
-AgendaView(
+FlutterAgenda(
+  resources: resources,
   agendaStyle: AgendaStyle(
     startHour: 9,
     endHour: 20,
-    pillarSeperator: false,
-    visibleTimeBorder: true,
-    timeItemWidth: 40,
-    /// put the cursor in [timeItemHeight] to understand how to utilize it.
-    timeItemHeight: 160,
+    headerLogo: HeaderLogo.bar,
+    timeItemWidth: 45,
+    timeSlot: TimeSlot.quarter,
   ),
-  pillarList: resources,
-  onLongPress: (clickedTime, object) {
-    /// put the cursor in the [onLongPress] to see docs.
+  onTap: (clickedTime, object) {
     print("Clicked time: ${clickedTime.hour}:${clickedTime.minute}");
+    // dont forget to cast the object back to it's original type
     print("Head Object related to the resource: $object");
   },
 )

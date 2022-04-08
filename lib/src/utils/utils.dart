@@ -10,6 +10,31 @@ class Utils {
         target.day == date.day;
   }
 
+  static double pillarWidth(int lenght, double timeWidth, double defaultWidth,
+      Orientation orientation) {
+    MediaQueryData mediaData =
+        MediaQueryData.fromWindow(WidgetsBinding.instance!.window);
+    double screenWidth = mediaData.size.width;
+    switch (orientation) {
+      case Orientation.portrait:
+        if (screenWidth < 480 && lenght < 4) {
+          return (screenWidth - timeWidth) / lenght;
+        } else if (lenght < 8) {
+          return (screenWidth - timeWidth) / lenght;
+        } else {
+          return defaultWidth;
+        }
+      case Orientation.landscape:
+        if (screenWidth < 480 && lenght < 6) {
+          return (screenWidth - timeWidth) / lenght;
+        } else if (lenght < 12) {
+          return (screenWidth - timeWidth) / lenght;
+        } else {
+          return defaultWidth;
+        }
+    }
+  }
+
   static String removeLastWord(String string) {
     List<String> words = string.split(' ');
     if (words.isEmpty) {

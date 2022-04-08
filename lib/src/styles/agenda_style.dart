@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_agenda/src/models/header_logo.dart';
 import 'package:flutter_agenda/src/models/time_slot.dart';
 
 class AgendaStyle {
@@ -7,25 +8,27 @@ class AgendaStyle {
     this.startHour: 0,
     this.endHour: 24,
     this.cornerBottom: true,
-    this.cornerRight: false,
+    this.cornerRight: true,
     this.pillarColor: Colors.white,
     this.cornerColor: Colors.white,
     this.timelineColor: Colors.white,
     this.timelineItemColor: Colors.white,
     this.headSeperator: false,
-    this.pillarSeperator: true,
+    this.pillarSeperator: false,
     this.mainBackgroundColor: Colors.white,
     this.decorationLineBorderColor: const Color(0xFFCECECE),
     // this.eventBackgroundColor: Colors.white,
     this.headBottomBorder = true,
-    this.timelineBorderColor: const Color(0xFFE6E6E6),
+    this.fittedWidth = true,
+    this.timelineBorderColor: const Color(0xFF7F7F7F),
     this.timeItemTextColor: const Color(0xFF7B7B7B),
     this.eventRadius: 5,
     this.timeItemTextStyle: const TextStyle(
         color: Color(0xFFF999999), fontSize: 11, fontWeight: FontWeight.w300),
     this.pillarWidth: 200,
-    this.pillarHeadHeight: 50,
+    this.headerHeight: 50,
     this.timeSlot: TimeSlot.half,
+    this.headerLogo = HeaderLogo.circle,
     this.timeItemWidth: 70,
     this.decorationLineHeight: 20,
     this.decorationLineDashWidth: 4,
@@ -46,6 +49,8 @@ class AgendaStyle {
   final int endHour;
 
   final Color pillarColor;
+
+  final HeaderLogo headerLogo;
 
   final Color cornerColor;
 
@@ -71,13 +76,16 @@ class AgendaStyle {
 
   final Color decorationLineBorderColor;
 
+  // pillar width
   final double pillarWidth;
+
+  final bool fittedWidth;
 
   final bool headSeperator;
 
   final bool pillarSeperator;
 
-  final double pillarHeadHeight;
+  final double headerHeight;
 
   /// this timeSlot is so important.
   ///
