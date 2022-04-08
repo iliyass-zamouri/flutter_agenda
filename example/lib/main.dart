@@ -80,23 +80,22 @@ class _AgendaScreenState extends State<AgendaScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: AgendaView(
+        body: FlutterAgenda(
           // the default view is timeItemHeight = 80 the timeline will be shown in 30 min view
           // and if you  setState it 160 it will be the 15 min view
           // or you can set it 60 and show an hourly timeline
           agendaStyle: AgendaStyle(
-            startHour: 9,
-            endHour: 20,
-            pillarSeperator: false,
-            visibleTimeBorder: true,
-            timeItemWidth: 40,
-            timeItemHeight: 160,
-          ),
+              startHour: 9,
+              endHour: 20,
+              pillarSeperator: false,
+              visibleTimeBorder: true,
+              timeItemWidth: 40,
+              timeSlot: TimeSlot.quarter),
           pillarList: resources,
           // the click else where (other than an event because it has it's own onTap parameter)
           // you get the object linked to the head object of the pillar which could be you project costume object
           // and the cliked time
-          onLongPress: (clickedTime, object) {
+          onTap: (clickedTime, object) {
             print("Clicked time: ${clickedTime.hour}:${clickedTime.minute}");
             print("Head Object related to the resource: $object");
           },
