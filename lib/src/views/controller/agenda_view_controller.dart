@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-mixin AgendaViewController {
+mixin AgendaController {
   final _horizontalScrollController = ScrollController();
   final _verticalScrollController = ScrollController();
   final _horizontalPixelsStream = StreamController<double>();

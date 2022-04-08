@@ -1,9 +1,6 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_agenda/flutter_agenda.dart';
-import 'package:flutter_agenda/src/models/pillar.dart';
-import 'package:flutter_agenda/src/styles/agenda_style.dart';
 import 'package:flutter_agenda/src/utils/utils.dart';
 import 'package:flutter_agenda/src/extensions/expand_equally.dart';
 import 'package:flutter_agenda/src/extensions/separator.dart';
@@ -11,9 +8,9 @@ import 'package:flutter_agenda/src/views/controller/agenda_view_controller.dart'
 import 'package:flutter_agenda/src/views/diagonal_scroll_view.dart';
 import 'package:flutter_agenda/src/views/pillar_view.dart';
 
-class AgendaView extends StatefulWidget {
+class FlutterAgenda extends StatefulWidget {
   /// Agenda visualization only one required parameter [pillarsList].
-  AgendaView({
+  FlutterAgenda({
     Key? key,
     required this.pillarList,
     this.onLongPress,
@@ -39,10 +36,10 @@ class AgendaView extends StatefulWidget {
   final AgendaStyle agendaStyle;
 
   @override
-  _AgendaViewState createState() => _AgendaViewState();
+  _FlutterAgendaState createState() => _FlutterAgendaState();
 }
 
-class _AgendaViewState extends State<AgendaView> with AgendaViewController {
+class _FlutterAgendaState extends State<FlutterAgenda> with AgendaController {
   @override
   void initState() {
     initController();
