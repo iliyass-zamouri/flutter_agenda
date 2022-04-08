@@ -4,11 +4,13 @@ import 'package:flutter_agenda/src/models/agenda_event.dart';
 import 'package:flutter_agenda/src/models/time_slot.dart';
 import 'package:flutter_agenda/src/styles/background_painter.dart';
 import 'package:flutter_agenda/src/styles/agenda_style.dart';
+import 'package:flutter_agenda/src/utils/utils.dart';
 import 'package:flutter_agenda/src/views/event_view.dart';
 
 class PillarView extends StatelessWidget {
   final dynamic headObject;
   final List<AgendaEvent> events;
+  final int lenght;
   final ScrollController scrollController;
   final AgendaStyle agendaStyle;
   final Function(EventTime, dynamic)? callBack;
@@ -17,6 +19,7 @@ class PillarView extends StatelessWidget {
     Key? key,
     required this.headObject,
     required this.events,
+    required this.lenght,
     required this.scrollController,
     required this.agendaStyle,
     this.callBack,
@@ -34,8 +37,11 @@ class PillarView extends StatelessWidget {
         physics: ClampingScrollPhysics(),
         child: Container(
           height: height(),
-          width: agendaStyle.pillarWidth,
-          decoration: agendaStyle.headSeperator
+          width: agendaStyle.fittedWidth
+              ? Utils.pillarWidth(lenght, agendaStyle.timeItemWidth,
+                  agendaStyle.pillarWidth, MediaQuery.of(context).orientation)
+              : agendaStyle.pillarWidth,
+          decoration: agendaStyle.pillarSeperator
               ? BoxDecoration(
                   border: Border(left: BorderSide(color: Color(0xFFCECECE))))
               : BoxDecoration(),
@@ -53,6 +59,7 @@ class PillarView extends StatelessWidget {
               ...events.map((event) {
                 return EventView(
                   event: event,
+                  lenght: lenght,
                   agendaStyle: agendaStyle,
                 );
               }).toList(),

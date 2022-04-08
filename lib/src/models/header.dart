@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class PillarHead {
+class Header {
   final String title;
 
   final String? subtitle;
@@ -19,7 +19,7 @@ class PillarHead {
 
   final Color color;
 
-  PillarHead({
+  Header({
     required this.title,
     this.subtitle,
     this.object,

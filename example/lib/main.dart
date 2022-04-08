@@ -29,8 +29,8 @@ class _AgendaScreenState extends State<AgendaScreen> {
     super.initState();
     resources = [
       Pillar(
-        head: PillarHead(
-            title: 'Resource 1', subtitle: '3 Appointments', object: 1),
+        head:
+            Header(title: 'Resource 1', subtitle: '3 Appointments', object: 1),
         events: [
           AgendaEvent(
             title: 'Meeting D',
@@ -48,7 +48,7 @@ class _AgendaScreenState extends State<AgendaScreen> {
         ],
       ),
       Pillar(
-        head: PillarHead(title: 'Resource 2', object: 2),
+        head: Header(title: 'Resource 2', object: 2),
         events: [
           AgendaEvent(
             title: 'Meeting G',
@@ -60,7 +60,7 @@ class _AgendaScreenState extends State<AgendaScreen> {
         ],
       ),
       Pillar(
-        head: PillarHead(title: 'Resource 3', object: 3, color: Colors.yellow),
+        head: Header(title: 'Resource 3', object: 3, color: Colors.yellow),
         events: [
           AgendaEvent(
             title: 'Meeting A',
@@ -81,17 +81,14 @@ class _AgendaScreenState extends State<AgendaScreen> {
     return SafeArea(
       child: Scaffold(
         body: FlutterAgenda(
-          // the default view is timeItemHeight = 80 the timeline will be shown in 30 min view
-          // and if you  setState it 160 it will be the 15 min view
-          // or you can set it 60 and show an hourly timeline
+          resources: resources,
           agendaStyle: AgendaStyle(
-              startHour: 9,
-              endHour: 20,
-              pillarSeperator: false,
-              visibleTimeBorder: true,
-              timeItemWidth: 40,
-              timeSlot: TimeSlot.quarter),
-          pillarList: resources,
+            startHour: 9,
+            endHour: 20,
+            headerLogo: HeaderLogo.bar,
+            timeItemWidth: 45,
+            timeSlot: TimeSlot.quarter,
+          ),
           // the click else where (other than an event because it has it's own onTap parameter)
           // you get the object linked to the head object of the pillar which could be you project costume object
           // and the cliked time

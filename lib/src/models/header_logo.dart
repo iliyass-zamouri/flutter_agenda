@@ -1,0 +1,4 @@
+enum HeaderLogo {
+  circle,
+  bar,
+}
