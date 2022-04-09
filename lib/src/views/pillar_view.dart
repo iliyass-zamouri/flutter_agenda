@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_agenda/flutter_agenda.dart';
-import 'package:flutter_agenda/src/models/agenda_event.dart';
-import 'package:flutter_agenda/src/models/time_slot.dart';
 import 'package:flutter_agenda/src/styles/background_painter.dart';
 import 'package:flutter_agenda/src/styles/agenda_style.dart';
 import 'package:flutter_agenda/src/utils/utils.dart';

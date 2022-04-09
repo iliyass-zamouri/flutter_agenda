@@ -1,3 +1,5 @@
+## [3.0.2] - 2022-04-09
+* Passing static analysis.
 ## [3.0.1] - 2022-04-08
 * Better docs. & args naming.
 

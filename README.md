@@ -12,7 +12,7 @@ Agenda Widget Package for Flutter. diagonal scrolling, beautiful UI, responsive 
 # Install
 
 ```
-flutter_agenda: ^2.0.0
+flutter_agenda: ^3.0.2
 ```
 
 
