@@ -6,8 +6,8 @@ Agenda Widget Package for Flutter. diagonal scrolling, beautiful UI, responsive 
 
 # Show case
 
-<img src="https://raw.githubusercontent.com/iliyass-zamouri/flutter_agenda/main/images/flutter_agenda.png" width="400" />
-<img src="https://raw.githubusercontent.com/iliyass-zamouri/flutter_agenda/main/images/flutter_agenda.gif" height="440" />  
+<img src="https://raw.githubusercontent.com/iliyass-zamouri/flutter_agenda/main/images/flutter_agenda.png" />
+<!-- <img src="https://raw.githubusercontent.com/iliyass-zamouri/flutter_agenda/main/images/flutter_agenda.gif" height="440" />   -->
 
 # Install
 
