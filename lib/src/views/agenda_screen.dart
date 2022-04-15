@@ -8,6 +8,15 @@ import 'package:flutter_agenda/src/extensions/expand_equally.dart';
 import 'package:flutter_agenda/src/extensions/separator.dart';
 import 'package:flutter_agenda/src/views/pillar_view.dart';
 
+// scroll linkers
+late ScrollLinker _horizontalScrollLinker;
+late ScrollLinker _verticalScrollLinker;
+// vertical scroll controllers
+List<ScrollController> _verticalScrollControllers = <ScrollController>[];
+// horizontal (header, body) scroll controllers
+late ScrollController _headerScrollController;
+late ScrollController _bodyScrollController;
+
 class FlutterAgenda extends StatefulWidget {
   /// Agenda visualization only one required parameter [pillarsList].
   FlutterAgenda({
@@ -39,15 +48,6 @@ class FlutterAgenda extends StatefulWidget {
   _FlutterAgendaState createState() => _FlutterAgendaState();
 }
 
-// scroll linkers
-late ScrollLinker _horizontalScrollLinker;
-late ScrollLinker _verticalScrollLinker;
-// vertical scroll controllers
-List<ScrollController> _verticalScrollControllers = <ScrollController>[];
-// horizontal (header, body) scroll controllers
-late ScrollController _headerScrollController;
-late ScrollController _bodyScrollController;
-
 class _FlutterAgendaState extends State<FlutterAgenda> {
   @override
   void initState() {
@@ -62,7 +62,7 @@ class _FlutterAgendaState extends State<FlutterAgenda> {
 
     // sychronize the scroll of the horizontal scrollers
     _verticalScrollControllers.add(_verticalScrollLinker.addAndGet());
-    for (var i = 0; i < widget.resources.length; i++) {
+    for (int i = 0; i < widget.resources.length; i++) {
       _verticalScrollControllers.add(_verticalScrollLinker.addAndGet());
     }
   }
@@ -79,6 +79,27 @@ class _FlutterAgendaState extends State<FlutterAgenda> {
     // disposing the horizontal scrollers
     _headerScrollController.dispose();
     _bodyScrollController.dispose();
+  }
+
+  @override
+  void didUpdateWidget(covariant FlutterAgenda oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.resources.length + 1 > _verticalScrollControllers.length) {
+      for (int i = 0;
+          i <=
+              (widget.resources.length + 1) - _verticalScrollControllers.length;
+          i++) {
+        _verticalScrollControllers.add(_verticalScrollLinker.addAndGet());
+      }
+    } else if (widget.resources.length + 1 <
+        _verticalScrollControllers.length) {
+      for (int i = 0;
+          i <=
+              _verticalScrollControllers.length - (widget.resources.length + 1);
+          i++) {
+        _verticalScrollControllers.removeLast();
+      }
+    }
   }
 
   @override

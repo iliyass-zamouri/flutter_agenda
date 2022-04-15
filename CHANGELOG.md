@@ -1,3 +1,6 @@
+## [3.0.3] - 2022-04-15
+* fixing rendering issues.
+
 ## [3.0.2] - 2022-04-09
 * Passing static analysis.
 ## [3.0.1] - 2022-04-08

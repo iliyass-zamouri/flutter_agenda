@@ -22,6 +22,8 @@ class AgendaScreen extends StatefulWidget {
 }
 
 late List<Resource> resources = <Resource>[];
+bool _isloading = true;
+TimeSlot _selectedTimeSlot = TimeSlot.half;
 
 class _AgendaScreenState extends State<AgendaScreen> {
   @override
@@ -80,23 +82,144 @@ class _AgendaScreenState extends State<AgendaScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: FlutterAgenda(
-          resources: resources,
-          agendaStyle: AgendaStyle(
-            startHour: 9,
-            endHour: 20,
-            headerLogo: HeaderLogo.bar,
-            timeItemWidth: 45,
-            timeSlot: TimeSlot.quarter,
-          ),
-          // the click else where (other than an event because it has it's own onTap parameter)
-          // you get the object linked to the head object of the pillar which could be you project costume object
-          // and the cliked time
-          onTap: (clickedTime, object) {
-            print("Clicked time: ${clickedTime.hour}:${clickedTime.minute}");
-            print("Head Object related to the resource: $object");
-          },
+        appBar: AppBar(
+          title: Text('Flutter Agenda'),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.refresh),
+              onPressed: () {
+                setState(() {
+                  _isloading = !_isloading;
+                });
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {
+                setState(() {
+                  resources.addAll([
+                    Resource(
+                      head: Header(title: 'Resource 4', object: 4),
+                      events: [
+                        AgendaEvent(
+                          title: 'Meeting A',
+                          subtitle: 'MA',
+                          start: EventTime(hour: 10, minute: 10),
+                          end: EventTime(hour: 11, minute: 45),
+                          onTap: () {
+                            print("meeting A Details");
+                          },
+                        ),
+                      ],
+                    ),
+                    Resource(
+                      head: Header(title: 'Resource 4', object: 4),
+                      events: [
+                        AgendaEvent(
+                          title: 'Meeting A',
+                          subtitle: 'MA',
+                          start: EventTime(hour: 10, minute: 10),
+                          end: EventTime(hour: 11, minute: 45),
+                          onTap: () {
+                            print("meeting A Details");
+                          },
+                        ),
+                      ],
+                    )
+                  ]);
+                });
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.remove),
+              onPressed: () {
+                setState(() {
+                  resources.removeAt(0);
+                });
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.event),
+              onPressed: () {
+                setState(() {
+                  resources.first.events.add(AgendaEvent(
+                    title: 'Meeting A',
+                    subtitle: 'MA',
+                    start: EventTime(hour: 9, minute: 0),
+                    end: EventTime(hour: 11, minute: 45),
+                    onTap: () {
+                      print("meeting A Details");
+                    },
+                  ));
+                });
+              },
+            ),
+            TextButton(
+              child: Text("15 min", style: TextStyle(color: Colors.white)),
+              onPressed: () {
+                setState(() {
+                  _selectedTimeSlot = TimeSlot.quarter;
+                });
+              },
+            ),
+            TextButton(
+              child: Text("30 min", style: TextStyle(color: Colors.white)),
+              onPressed: () {
+                setState(() {
+                  _selectedTimeSlot = TimeSlot.half;
+                });
+              },
+            ),
+            TextButton(
+              child: Text("1h", style: TextStyle(color: Colors.white)),
+              onPressed: () {
+                setState(() {
+                  _selectedTimeSlot = TimeSlot.full;
+                });
+              },
+            ),
+          ],
         ),
+        body: _isloading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : FlutterAgenda(
+                resources: resources,
+                agendaStyle: AgendaStyle(
+                  startHour: 9,
+                  endHour: 20,
+                  headerLogo: HeaderLogo.bar,
+                  fittedWidth: false,
+                  timeItemWidth: 45,
+                  timeSlot: _selectedTimeSlot,
+                ),
+                // the click else where (other than an event because it has it's own onTap parameter)
+                // you get the object linked to the head object of the pillar which could be you project costume object
+                // and the cliked time
+                onTap: (clickedTime, object) {
+                  print(
+                      "Clicked time: ${clickedTime.hour}:${clickedTime.minute}");
+                  print("Head Object related to the resource: $object");
+                  resources
+                      .where((resource) => resource.head.object == object)
+                      .first
+                      .events
+                      .add(AgendaEvent(
+                        title: 'Meeting A',
+                        subtitle: 'MA',
+                        start: clickedTime,
+                        end: EventTime(
+                            hour: clickedTime.hour + 1,
+                            minute: clickedTime.minute),
+                        onTap: () {
+                          print("meeting A Details");
+                        },
+                      ));
+
+                  setState(() {});
+                },
+              ),
       ),
     );
   }

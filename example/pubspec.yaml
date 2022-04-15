@@ -10,7 +10,7 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^0.1.2
   flutter_agenda:
-    # path: ../
+    path: ../
 
 dev_dependencies:
   flutter_test:

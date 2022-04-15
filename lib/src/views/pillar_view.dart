@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_agenda/flutter_agenda.dart';
 import 'package:flutter_agenda/src/styles/background_painter.dart';
-import 'package:flutter_agenda/src/styles/agenda_style.dart';
 import 'package:flutter_agenda/src/utils/utils.dart';
 import 'package:flutter_agenda/src/views/event_view.dart';
 
@@ -25,14 +24,14 @@ class PillarView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: (tapdetails) => callBack!(
-          tappedHour(tapdetails.localPosition.dy, agendaStyle.timeSlot.height,
-              agendaStyle.startHour),
-          headObject),
-      child: SingleChildScrollView(
-        controller: scrollController,
-        physics: ClampingScrollPhysics(),
+    return SingleChildScrollView(
+      controller: scrollController,
+      physics: ClampingScrollPhysics(),
+      child: GestureDetector(
+        onTapDown: (tapdetails) => callBack!(
+            tappedHour(tapdetails.localPosition.dy, agendaStyle.timeSlot.height,
+                agendaStyle.startHour),
+            headObject),
         child: Container(
           height: height(),
           width: agendaStyle.fittedWidth

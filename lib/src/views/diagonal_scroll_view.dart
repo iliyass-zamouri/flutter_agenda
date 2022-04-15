@@ -26,8 +26,7 @@ class DiagonalScrollView extends StatefulWidget {
     this.flingVelocityReduction: 1,
     this.horizontalPixelsStreamController,
     this.verticalPixelsStreamController,
-  })  : 
-        super(key: key);
+  }) : super(key: key);
 
   @override
   _DiagonalScrollViewState createState() => _DiagonalScrollViewState();
