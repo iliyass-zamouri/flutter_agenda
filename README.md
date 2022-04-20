@@ -12,7 +12,7 @@ Agenda Widget Package for Flutter. diagonal scrolling, beautiful UI, responsive 
 # Install
 
 ```
-flutter_agenda: ^3.0.3
+flutter_agenda: ^3.1.0
 ```
 
 
@@ -28,6 +28,7 @@ FlutterAgenda(
   agendaStyle: AgendaStyle(
     startHour: 9,
     endHour: 20,
+    direction: TextDirection.ltr,
     headerLogo: HeaderLogo.bar,
     timeItemWidth: 45,
     timeSlot: TimeSlot.quarter,

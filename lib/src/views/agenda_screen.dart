@@ -8,15 +8,6 @@ import 'package:flutter_agenda/src/extensions/expand_equally.dart';
 import 'package:flutter_agenda/src/extensions/separator.dart';
 import 'package:flutter_agenda/src/views/pillar_view.dart';
 
-// scroll linkers
-late ScrollLinker _horizontalScrollLinker;
-late ScrollLinker _verticalScrollLinker;
-// vertical scroll controllers
-List<ScrollController> _verticalScrollControllers = <ScrollController>[];
-// horizontal (header, body) scroll controllers
-late ScrollController _headerScrollController;
-late ScrollController _bodyScrollController;
-
 class FlutterAgenda extends StatefulWidget {
   /// Agenda visualization only one required parameter [pillarsList].
   FlutterAgenda({
@@ -49,6 +40,15 @@ class FlutterAgenda extends StatefulWidget {
 }
 
 class _FlutterAgendaState extends State<FlutterAgenda> {
+  // scroll linkers
+  late ScrollLinker _horizontalScrollLinker;
+  late ScrollLinker _verticalScrollLinker;
+  // vertical scroll controllers
+  List<ScrollController> _verticalScrollControllers = <ScrollController>[];
+  // horizontal (header, body) scroll controllers
+  late ScrollController _headerScrollController;
+  late ScrollController _bodyScrollController;
+
   @override
   void initState() {
     super.initState();
@@ -104,19 +104,23 @@ class _FlutterAgendaState extends State<FlutterAgenda> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        _buildMainContent(context),
-        _buildTimeLines(context),
-        _buildHeaders(context),
-        _buildCorner(),
-      ],
+    return Directionality(
+      textDirection: widget.agendaStyle.direction,
+      child: Stack(
+        children: <Widget>[
+          _buildMainContent(context),
+          _buildTimeLines(context),
+          _buildHeaders(context),
+          _buildCorner(),
+        ],
+      ),
     );
   }
 
   Widget _buildCorner() {
     return Positioned(
-      left: 0,
+      left: widget.agendaStyle.direction == TextDirection.ltr ? 0 : null,
+      right: widget.agendaStyle.direction == TextDirection.rtl ? 0 : null,
       top: 0,
       child: SizedBox(
         width: widget.agendaStyle.timeItemWidth + 1,
@@ -126,7 +130,15 @@ class _FlutterAgendaState extends State<FlutterAgenda> {
           decoration: BoxDecoration(
             color: widget.agendaStyle.cornerColor,
             border: Border(
-                right: !widget.agendaStyle.cornerRight
+                right: (!widget.agendaStyle.cornerRight &&
+                        widget.agendaStyle.direction != TextDirection.rtl)
+                    ? BorderSide.none
+                    : BorderSide(
+                        color: widget.agendaStyle.timelineBorderColor
+                            .withOpacity(0.4),
+                      ),
+                left: (!widget.agendaStyle.cornerRight &&
+                        widget.agendaStyle.direction != TextDirection.ltr)
                     ? BorderSide.none
                     : BorderSide(
                         color: widget.agendaStyle.timelineBorderColor
@@ -147,13 +159,19 @@ class _FlutterAgendaState extends State<FlutterAgenda> {
   Widget _buildMainContent(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-        left: widget.agendaStyle.timeItemWidth,
+        left: widget.agendaStyle.direction == TextDirection.ltr
+            ? widget.agendaStyle.timeItemWidth
+            : 0,
+        right: widget.agendaStyle.direction == TextDirection.rtl
+            ? widget.agendaStyle.timeItemWidth
+            : 0,
         top: widget.agendaStyle.headerHeight,
       ),
       child: ScrollConfiguration(
         behavior: NoGlowScroll(),
         child: ListView(
           scrollDirection: Axis.horizontal,
+          // reverse: widget.agendaStyle.direction == TextDirection.rtl,
           controller: _bodyScrollController,
           children: widget.resources.map((pillar) {
             return PillarView(
@@ -173,15 +191,25 @@ class _FlutterAgendaState extends State<FlutterAgenda> {
 
   Widget _buildTimeLines(BuildContext context) {
     return Container(
-      alignment: Alignment.topLeft,
+      alignment: widget.agendaStyle.direction == TextDirection.rtl
+          ? Alignment.topLeft
+          : Alignment.topRight,
       width: widget.agendaStyle.timeItemWidth + 1,
       padding: EdgeInsets.only(top: widget.agendaStyle.headerHeight),
       decoration: BoxDecoration(
         color: widget.agendaStyle.timelineColor,
         border: Border(
-            right: BorderSide(
-                color:
-                    widget.agendaStyle.timelineBorderColor.withOpacity(0.5))),
+          right: widget.agendaStyle.direction == TextDirection.ltr
+              ? BorderSide(
+                  color:
+                      widget.agendaStyle.timelineBorderColor.withOpacity(0.5))
+              : BorderSide.none,
+          left: widget.agendaStyle.direction == TextDirection.rtl
+              ? BorderSide(
+                  color:
+                      widget.agendaStyle.timelineBorderColor.withOpacity(0.5))
+              : BorderSide.none,
+        ),
       ),
       child: ScrollConfiguration(
         behavior: NoGlowScroll(),
@@ -320,7 +348,9 @@ class _FlutterAgendaState extends State<FlutterAgenda> {
 
   Widget _buildHeaders(BuildContext context) {
     return Container(
-      alignment: Alignment.topLeft,
+      alignment: widget.agendaStyle.direction == TextDirection.rtl
+          ? Alignment.topLeft
+          : Alignment.topRight,
       decoration: BoxDecoration(
         color: widget.agendaStyle.pillarColor,
         border: !widget.agendaStyle.headBottomBorder
@@ -331,7 +361,13 @@ class _FlutterAgendaState extends State<FlutterAgenda> {
                         .withOpacity(0.4))),
       ),
       height: widget.agendaStyle.headerHeight,
-      padding: EdgeInsets.only(left: widget.agendaStyle.timeItemWidth),
+      padding: EdgeInsets.only(
+          left: widget.agendaStyle.direction == TextDirection.ltr
+              ? widget.agendaStyle.timeItemWidth
+              : 0,
+          right: widget.agendaStyle.direction == TextDirection.rtl
+              ? widget.agendaStyle.timeItemWidth
+              : 0),
       child: ScrollConfiguration(
         behavior: NoGlowScroll(),
         child: ListView(
