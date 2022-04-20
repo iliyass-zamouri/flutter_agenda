@@ -1,3 +1,6 @@
+## [3.1.0] - 2022-04-20
+* Support for ltr.
+
 ## [3.0.3] - 2022-04-15
 * fixing rendering issues.
 

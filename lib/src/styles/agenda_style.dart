@@ -8,6 +8,7 @@ class AgendaStyle {
   const AgendaStyle({
     this.startHour: 0,
     this.endHour: 24,
+    this.direction: TextDirection.ltr,
     this.cornerBottom: true,
     this.cornerRight: true,
     this.pillarColor: Colors.white,
@@ -37,6 +38,8 @@ class AgendaStyle {
     this.visibleTimeBorder: true,
     this.visibleDecorationBorder: true,
   });
+
+  final TextDirection direction;
 
   ///Timeline start hour.
   ///
