@@ -30,6 +30,8 @@
 .pub/
 build/
 
+example/pubspec.yaml
+
 # Android related
 **/android/**/gradle-wrapper.jar
 **/android/.gradle
