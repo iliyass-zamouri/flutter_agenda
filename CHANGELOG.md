@@ -1,4 +1,5 @@
-## [3.2.0] - 2024-01-15
+## [4.0.0] - 2024-01-15
+* **BREAKING CHANGE**: Major refactoring for performance improvements
 * **Major Performance Improvement**: Implemented efficient state management to prevent unnecessary rebuilds
 * **New State Controller**: Added `AgendaStateController` for resource-level change tracking
 * **Optimized Pillar Views**: Created `OptimizedPillarView` that only rebuilds when necessary
