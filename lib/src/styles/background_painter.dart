@@ -59,13 +59,19 @@ class BackgroundPainter extends CustomPainter {
     double currentYOffset = 0.0;
     
     for (int dayIndex = 0; dayIndex < daysCount; dayIndex++) {
-      // Paint hour lines for this day
+      // Define the strict boundaries of this day's area
+      final dayStartY = currentYOffset;
+      final dayEndY = currentYOffset + dayHeight;
+      
+      // Paint hour lines ONLY within this day's area (never in separator areas)
       for (int hour = agendaStyle.startHour + 1; hour < agendaStyle.endHour; hour++) {
         double hourOffsetInDay = (hour - agendaStyle.startHour) * agendaStyle.timeSlot.height;
-        double totalOffset = currentYOffset + hourOffsetInDay;
+        double totalOffset = dayStartY + hourOffsetInDay;
         
-        // Only paint if within canvas bounds
-        if (totalOffset < size.height) {
+        // STRICT CHECK: Only paint if strictly within the day area and canvas bounds
+        if (totalOffset >= dayStartY && 
+            totalOffset < dayEndY && 
+            totalOffset < size.height) {
           canvas.drawLine(
             Offset(0, totalOffset),
             Offset(size.width, totalOffset),
@@ -74,12 +80,13 @@ class BackgroundPainter extends CustomPainter {
         }
       }
       
-      // Move to next day position
+      // Move to next day position (add day height)
       currentYOffset += dayHeight;
       
       // Paint day separator area (except for last day)
+      // This creates a clean white/colored area where day names appear
       if (dayIndex < daysCount - 1) {
-        // Paint white/separator color area for the day separator space
+        // Paint solid color area for the day separator space
         if (currentYOffset < size.height) {
           canvas.drawRect(
             Rect.fromLTWH(0, currentYOffset, size.width, daySeparatorHeight),
@@ -135,18 +142,26 @@ class BackgroundPainter extends CustomPainter {
     double currentYOffset = 0.0;
     
     for (int dayIndex = 0; dayIndex < daysCount; dayIndex++) {
-      // Paint decoration lines for this day only (skip day separator areas)
+      // Define the strict boundaries of this day's area
+      final dayStartY = currentYOffset;
+      final dayEndY = currentYOffset + dayHeight;
+      
+      // Paint decoration lines ONLY within this day's area (never in separator areas)
       final dayDrawLimit = dayHeight / agendaStyle.decorationLineHeight;
       for (double count = 0; count < dayDrawLimit; count += 1) {
         double decorationOffsetInDay = count * agendaStyle.decorationLineHeight;
-        double totalOffset = currentYOffset + decorationOffsetInDay;
+        double totalOffset = dayStartY + decorationOffsetInDay;
         
-        // Only paint if within canvas bounds and within the day area
-        if (totalOffset < size.height && totalOffset >= currentYOffset && totalOffset < currentYOffset + dayHeight) {
+        // STRICT CHECK: Only paint if strictly within the day area and canvas bounds
+        if (totalOffset >= dayStartY && 
+            totalOffset < dayEndY && 
+            totalOffset < size.height) {
+          
           final paint = Paint()..color = agendaStyle.decorationLineBorderColor;
           final dashWidth = agendaStyle.decorationLineDashWidth;
           final dashSpace = agendaStyle.decorationLineDashSpaceWidth;
           var startX = 0.0;
+          
           while (startX < size.width) {
             canvas.drawLine(
               Offset(startX, totalOffset),
@@ -158,10 +173,11 @@ class BackgroundPainter extends CustomPainter {
         }
       }
       
-      // Move to next day position
+      // Move to next day position (add day height)
       currentYOffset += dayHeight;
       
-      // Skip day separator area (except for last day)
+      // Add day separator height (except for last day)
+      // This creates the gap where day names appear - NO PAINTING HERE
       if (dayIndex < daysCount - 1) {
         currentYOffset += daySeparatorHeight;
       }

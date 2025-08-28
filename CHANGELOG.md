@@ -1,3 +1,11 @@
+## [5.0.3] - 2024-01-15
+* **🎨 Clean Day Separators**: Fixed background painter to never paint over day name areas for ALL timeslot types
+* **🔧 Strict Boundary Checking**: Enhanced painting logic with precise day area boundaries
+* **⏰ All TimeSlot Support**: Fixed for full (60px), half (80px), and quarter (160px) timeslots
+* **🎯 Perfect Alignment**: Day separator areas now remain completely clean and white
+* **🖌️ Paint Precision**: Both time borders and decoration lines respect day boundaries strictly
+* **✨ Professional Look**: Clean day headers without any overlapping lines or decorations
+
 ## [5.0.2] - 2024-01-15
 * **🎯 Fixed Event Positioning**: Corrected multi-day event positioning with proper day separator calculations
 * **⏰ Enhanced Minute Precision**: Improved tap detection to support 15-minute intervals (not just 30-minute)
