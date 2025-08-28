@@ -1,0 +1,8 @@
+# Exclude example files from publishing
+example/
+images/
+publish.bat
+publish.sh
+REFACTORING_SUMMARY.md
+.vscode/
+.fvmrc
