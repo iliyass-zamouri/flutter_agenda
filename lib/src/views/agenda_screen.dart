@@ -265,29 +265,100 @@ class _FlutterAgendaState extends State<FlutterAgenda> {
           scrollDirection: Axis.vertical,
           physics: ClampingScrollPhysics(),
           shrinkWrap: true,
-          children: [
-            for (var i = widget.agendaStyle.startHour;
-                i < widget.agendaStyle.endHour;
-                i += 1)
-              i
-          ].map((hour) {
-            return Container(
-              height: widget.agendaStyle.timeSlot.height,
-              decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(
-                    color:
-                        widget.agendaStyle.timelineBorderColor.withOpacity(0.8),
-                    width: 0.8,
-                  ),
+          children: _buildTimelineItems(),
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _buildTimelineItems() {
+    if (widget.agendaStyle.enableMultiDayEvents == true) {
+      return _buildMultiDayTimeline();
+    } else {
+      return _buildSingleDayTimeline();
+    }
+  }
+
+  List<Widget> _buildMultiDayTimeline() {
+    final List<Widget> timelineItems = [];
+    
+    // Get the date range for the timeline
+    final startDate = widget.agendaStyle.timelineStartDate ?? DateTime.now();
+    final endDate = widget.agendaStyle.timelineEndDate ?? startDate.add(const Duration(days: 1));
+    
+    // Generate timeline for each day
+    var currentDate = DateTime(startDate.year, startDate.month, startDate.day);
+    final lastDate = DateTime(endDate.year, endDate.month, endDate.day);
+    
+    while (currentDate.isBefore(lastDate) || currentDate.isAtSameMomentAs(lastDate)) {
+      // Add day separator (except for the first day)
+      if (currentDate.isAfter(DateTime(startDate.year, startDate.month, startDate.day))) {
+        timelineItems.add(
+          Container(
+            height: widget.agendaStyle.daySeparatorHeight ?? 40.0,
+            decoration: BoxDecoration(
+              color: widget.agendaStyle.daySeparatorColor ?? Colors.grey[200],
+              border: Border(
+                top: BorderSide(
+                  color: widget.agendaStyle.daySeparatorBorderColor ?? Colors.grey[400]!,
+                  width: 2.0,
                 ),
-                color: widget.agendaStyle.timelineItemColor,
+                bottom: BorderSide(
+                  color: widget.agendaStyle.daySeparatorBorderColor ?? Colors.grey[400]!,
+                  width: 1.0,
+                ),
               ),
-              child: widget.agendaStyle.timeSlot.height == 80
-                  ? Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
+            ),
+            child: Center(
+              child: Text(
+                '${_getDayName(currentDate.weekday)}\n${currentDate.day.toString().padLeft(2, '0')}/${currentDate.month.toString().padLeft(2, '0')}',
+                style: widget.agendaStyle.daySeparatorTextStyle ?? const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+            ),
+          ),
+        );
+      }
+      
+      // Add timeline items for this day
+      for (var hour = widget.agendaStyle.startHour; hour < widget.agendaStyle.endHour; hour++) {
+        timelineItems.add(_buildTimelineHourItem(hour));
+      }
+      
+      // Move to next day
+      currentDate = currentDate.add(const Duration(days: 1));
+    }
+    
+    return timelineItems;
+  }
+
+  List<Widget> _buildSingleDayTimeline() {
+    return [
+      for (var hour = widget.agendaStyle.startHour; hour < widget.agendaStyle.endHour; hour++)
+        _buildTimelineHourItem(hour)
+    ];
+  }
+
+  Widget _buildTimelineHourItem(int hour) {
+    return Container(
+      height: widget.agendaStyle.timeSlot.height,
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: widget.agendaStyle.timelineBorderColor.withOpacity(0.8),
+            width: 0.8,
+          ),
+        ),
+        color: widget.agendaStyle.timelineItemColor,
+      ),
+      child: widget.agendaStyle.timeSlot.height == 80
+          ? Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
                         Padding(
                           padding:
                               EdgeInsets.symmetric(vertical: 2, horizontal: 5),
@@ -376,8 +447,8 @@ class _FlutterAgendaState extends State<FlutterAgenda> {
                               .seperate(widget.agendaStyle.timelineBorderColor)
                               .toList(),
                         )
-                      : Padding(
-                          padding: const EdgeInsets.all(5.0),
+                      : Container(
+                          alignment: Alignment.center,
                           child: Text(
                             Utils.hourFormatter(hour, 0),
                             style: widget.agendaStyle.timeItemTextStyle
@@ -387,11 +458,12 @@ class _FlutterAgendaState extends State<FlutterAgenda> {
                             textAlign: TextAlign.right,
                           ),
                         ),
-            );
-          }).toList(),
-        ),
-      ),
     );
+  }
+
+  String _getDayName(int weekday) {
+    const days = ['Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.', 'Sun.'];
+    return days[weekday - 1];
   }
 
   Widget _buildHeaders(BuildContext context) {

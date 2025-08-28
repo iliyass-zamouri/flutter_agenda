@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
       home: AgendaScreen(),
     );
   }
-  
+
   // Helper method to build legend items
   Widget _buildLegendItem(String label, Color color) {
     return Container(
@@ -64,14 +64,18 @@ class _AgendaScreenState extends State<AgendaScreen> {
   @override
   void initState() {
     super.initState();
-    
+
     // Get current date for consistent examples
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    
+
     resources = [
       Resource(
-        head: Header(title: '24/7 Support Team', subtitle: 'Multi-day Operations', object: 1, color: Colors.blue),
+        head: Header(
+            title: '24/7 Support Team',
+            subtitle: 'Multi-day Operations',
+            object: 1,
+            color: Colors.blue),
         events: [
           // Single-day event (traditional way)
           AgendaEvent(
@@ -82,42 +86,56 @@ class _AgendaScreenState extends State<AgendaScreen> {
             end: SingleDayEventTime(hour: 9, minute: 30),
             onTap: () => print("Morning Standup - Single day event"),
           ),
-          
+
           // Multi-day event: Night shift spanning midnight
           MultiDayAgendaEvent.spanningDays(
             title: 'Night Shift 1',
             subtitle: '22:00 → 06:00 (Cross-day)',
-            startDate: today.add(const Duration(days: 1)).copyWith(hour: 22, minute: 0),
-            endDate: today.add(const Duration(days: 2)).copyWith(hour: 6, minute: 0),
+            startDate: today
+                .add(const Duration(days: 1))
+                .copyWith(hour: 22, minute: 0),
+            endDate:
+                today.add(const Duration(days: 2)).copyWith(hour: 6, minute: 0),
             backgroundColor: Colors.indigo,
-            onTap: () => print("Night Shift 1 - Multi-day event spanning midnight!"),
+            onTap: () =>
+                print("Night Shift 1 - Multi-day event spanning midnight!"),
           ),
-          
+
           // Multi-day event: Long conference
           MultiDayAgendaEvent.spanningDays(
             title: 'Tech Conference 2024',
             subtitle: '3-Day Event',
-            startDate: today.add(const Duration(days: 3)).copyWith(hour: 9, minute: 0),
-            endDate: today.add(const Duration(days: 5)).copyWith(hour: 18, minute: 0),
+            startDate:
+                today.add(const Duration(days: 3)).copyWith(hour: 9, minute: 0),
+            endDate: today
+                .add(const Duration(days: 5))
+                .copyWith(hour: 18, minute: 0),
             backgroundColor: Colors.orange,
             onTap: () => print("Tech Conference - 3-day multi-day event!"),
           ),
         ],
       ),
-      
       Resource(
-        head: Header(title: 'Maintenance Team', subtitle: 'System Operations', object: 2, color: Colors.red),
+        head: Header(
+            title: 'Maintenance Team',
+            subtitle: 'System Operations',
+            object: 2,
+            color: Colors.red),
         events: [
           // Multi-day event: Maintenance window
           MultiDayAgendaEvent.spanningDays(
             title: 'System Maintenance',
             subtitle: 'Database Update',
-            startDate: today.add(const Duration(days: 2)).copyWith(hour: 23, minute: 0),
-            endDate: today.add(const Duration(days: 3)).copyWith(hour: 5, minute: 0),
+            startDate: today
+                .add(const Duration(days: 2))
+                .copyWith(hour: 23, minute: 0),
+            endDate:
+                today.add(const Duration(days: 3)).copyWith(hour: 5, minute: 0),
             backgroundColor: Colors.red,
-            onTap: () => print("System Maintenance - Overnight multi-day event!"),
+            onTap: () =>
+                print("System Maintenance - Overnight multi-day event!"),
           ),
-          
+
           // Single-day event
           AgendaEvent(
             title: 'Security Audit',
@@ -129,30 +147,42 @@ class _AgendaScreenState extends State<AgendaScreen> {
           ),
         ],
       ),
-      
       Resource(
-        head: Header(title: 'Development Team', subtitle: 'Project Work', object: 3, color: Colors.green),
+        head: Header(
+            title: 'Development Team',
+            subtitle: 'Project Work',
+            object: 3,
+            color: Colors.green),
         events: [
           // Multi-day event: Sprint planning
           MultiDayAgendaEvent.spanningDays(
             title: 'Sprint Planning',
             subtitle: '2-Day Workshop',
-            startDate: today.add(const Duration(days: 4)).copyWith(hour: 10, minute: 0),
-            endDate: today.add(const Duration(days: 5)).copyWith(hour: 16, minute: 0),
+            startDate: today
+                .add(const Duration(days: 4))
+                .copyWith(hour: 10, minute: 0),
+            endDate: today
+                .add(const Duration(days: 5))
+                .copyWith(hour: 16, minute: 0),
             backgroundColor: Colors.teal,
             onTap: () => print("Sprint Planning - 2-day multi-day event!"),
           ),
-          
+
           // Multi-day event: Code freeze
           MultiDayAgendaEvent.spanningDays(
             title: 'Code Freeze',
             subtitle: 'Release Preparation',
-            startDate: today.add(const Duration(days: 6)).copyWith(hour: 18, minute: 0),
-            endDate: today.add(const Duration(days: 7)).copyWith(hour: 12, minute: 0),
+            startDate: today
+                .add(const Duration(days: 6))
+                .copyWith(hour: 18, minute: 0),
+            endDate: today
+                .add(const Duration(days: 7))
+                .copyWith(hour: 12, minute: 0),
             backgroundColor: Colors.purple,
-            onTap: () => print("Code Freeze - Release preparation multi-day event!"),
+            onTap: () =>
+                print("Code Freeze - Release preparation multi-day event!"),
           ),
-          
+
           // Single-day event
           AgendaEvent(
             title: 'Code Review',
@@ -164,26 +194,34 @@ class _AgendaScreenState extends State<AgendaScreen> {
           ),
         ],
       ),
-      
       Resource(
-        head: Header(title: 'Customer Support', subtitle: '24/7 Coverage', object: 4, color: Colors.purple),
+        head: Header(
+            title: 'Customer Support',
+            subtitle: '24/7 Coverage',
+            object: 4,
+            color: Colors.purple),
         events: [
           // Multi-day event: Weekend coverage
           MultiDayAgendaEvent.spanningDays(
             title: 'Weekend Support',
             subtitle: '48-Hour Coverage',
-            startDate: today.add(const Duration(days: 5)).copyWith(hour: 0, minute: 0),
-            endDate: today.add(const Duration(days: 7)).copyWith(hour: 0, minute: 0),
+            startDate:
+                today.add(const Duration(days: 5)).copyWith(hour: 0, minute: 0),
+            endDate:
+                today.add(const Duration(days: 7)).copyWith(hour: 0, minute: 0),
             backgroundColor: Colors.deepPurple,
             onTap: () => print("Weekend Support - 48-hour multi-day event!"),
           ),
-          
+
           // Multi-day event: Holiday coverage
           MultiDayAgendaEvent.spanningDays(
             title: 'Holiday Coverage',
             subtitle: 'Extended Hours',
-            startDate: today.add(const Duration(days: 8)).copyWith(hour: 8, minute: 0),
-            endDate: today.add(const Duration(days: 10)).copyWith(hour: 20, minute: 0),
+            startDate:
+                today.add(const Duration(days: 8)).copyWith(hour: 8, minute: 0),
+            endDate: today
+                .add(const Duration(days: 10))
+                .copyWith(hour: 20, minute: 0),
             backgroundColor: Colors.deepOrange,
             onTap: () => print("Holiday Coverage - Extended multi-day event!"),
           ),
@@ -198,7 +236,7 @@ class _AgendaScreenState extends State<AgendaScreen> {
       textDirection: TextDirection.ltr,
       child: SafeArea(
         child: Scaffold(
-                    persistentFooterButtons: [
+          persistentFooterButtons: [
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
@@ -274,7 +312,8 @@ class _AgendaScreenState extends State<AgendaScreen> {
                     },
                   ),
                   TextButton(
-                    child: Text("15", style: TextStyle(color: Colors.black87, fontSize: 12)),
+                    child: Text("15",
+                        style: TextStyle(color: Colors.black87, fontSize: 12)),
                     onPressed: () {
                       setState(() {
                         _selectedTimeSlot = TimeSlot.quarter;
@@ -282,7 +321,8 @@ class _AgendaScreenState extends State<AgendaScreen> {
                     },
                   ),
                   TextButton(
-                    child: Text("30", style: TextStyle(color: Colors.black87, fontSize: 12)),
+                    child: Text("30",
+                        style: TextStyle(color: Colors.black87, fontSize: 12)),
                     onPressed: () {
                       setState(() {
                         _selectedTimeSlot = TimeSlot.half;
@@ -290,7 +330,8 @@ class _AgendaScreenState extends State<AgendaScreen> {
                     },
                   ),
                   TextButton(
-                    child: Text("1h", style: TextStyle(color: Colors.black87, fontSize: 12)),
+                    child: Text("1h",
+                        style: TextStyle(color: Colors.black87, fontSize: 12)),
                     onPressed: () {
                       setState(() {
                         _selectedTimeSlot = TimeSlot.full;
@@ -298,14 +339,17 @@ class _AgendaScreenState extends State<AgendaScreen> {
                     },
                   ),
                   TextButton(
-                    child: Text("Nav", style: TextStyle(color: Colors.black87, fontSize: 12)),
+                    child: Text("Nav",
+                        style: TextStyle(color: Colors.black87, fontSize: 12)),
                     onPressed: () {
                       showModalBottomSheet(
-                          context: context, builder: (context) => SecondScreen());
+                          context: context,
+                          builder: (context) => SecondScreen());
                     },
                   ),
                   TextButton(
-                    child: Text("Top", style: TextStyle(color: Colors.black87, fontSize: 12)),
+                    child: Text("Top",
+                        style: TextStyle(color: Colors.black87, fontSize: 12)),
                     onPressed: () {
                       setState(() {
                         // This would toggle between top and bottom headers
@@ -330,7 +374,8 @@ class _AgendaScreenState extends State<AgendaScreen> {
                       decoration: BoxDecoration(
                         color: Colors.blue[50],
                         border: Border(
-                          bottom: BorderSide(color: Colors.blue[200]!, width: 1),
+                          bottom:
+                              BorderSide(color: Colors.blue[200]!, width: 1),
                         ),
                       ),
                       child: Column(
@@ -353,7 +398,8 @@ class _AgendaScreenState extends State<AgendaScreen> {
                           const SizedBox(height: 8),
                           Text(
                             'This example demonstrates both single-day and multi-day events. '
-                            'Notice how events can span across days, perfect for 24/7 operations!',
+                            'Notice how events can span across multiple days with visual day separators, '
+                            'perfect for 24/7 operations, conferences, and extended activities!',
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.blue[700],
@@ -369,11 +415,38 @@ class _AgendaScreenState extends State<AgendaScreen> {
                               _buildLegendItem('Long Duration', Colors.orange),
                             ],
                           ),
+                          const SizedBox(height: 8),
+                          Container(
+                            padding: const EdgeInsets.all(8.0),
+                            decoration: BoxDecoration(
+                              color: Colors.green[50],
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: Colors.green[200]!),
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(Icons.check_circle_outline,
+                                    color: Colors.green[700], size: 16),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    '✅ Multi-day timeline rendering is now FULLY IMPLEMENTED! '
+                                    'Scroll down to see events spanning across multiple days with day separators.',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.green[800],
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
-                    
-                                        // Main agenda
+
+                    // Main agenda
                     Expanded(
                       child: FlutterAgenda(
                         resources: resources,
@@ -385,13 +458,18 @@ class _AgendaScreenState extends State<AgendaScreen> {
                           fittedWidth: false,
                           timeItemWidth: 45,
                           timeSlot: _selectedTimeSlot,
-                          headersPosition: HeadersPosition.bottom, // Move headers to bottom
-                          enableMultiDayEvents: true, // Enable multi-day event support
+                          headersPosition:
+                              HeadersPosition.bottom, // Move headers to bottom
+                          enableMultiDayEvents:
+                              true, // Enable multi-day event support
                           timelineStartDate: DateTime.now(), // Start from today
-                          timelineEndDate: DateTime.now().add(const Duration(days: 7)), // Show 7 days
+                          timelineEndDate: DateTime.now()
+                              .add(const Duration(days: 7)), // Show 7 days
                           daySeparatorHeight: 50.0, // Height of day separators
-                          daySeparatorColor: Colors.grey[100], // Light grey background
-                          daySeparatorBorderColor: Colors.grey[400]!, // Darker grey borders
+                          daySeparatorColor:
+                              Colors.grey[100], // Light grey background
+                          daySeparatorBorderColor:
+                              Colors.grey[400]!, // Darker grey borders
                         ),
                         // the click else where (other than an event because it has it's own onTap parameter)
                         // you get the object linked to the head object of the pillar which could be you project costume object
@@ -401,7 +479,8 @@ class _AgendaScreenState extends State<AgendaScreen> {
                               "Clicked time: ${clickedTime.hour}:${clickedTime.minute}");
                           print("Head Object related to the resource: $object");
                           resources
-                              .where((resource) => resource.head.object == object)
+                              .where(
+                                  (resource) => resource.head.object == object)
                               .first
                               .events
                               .add(AgendaEvent(
@@ -426,7 +505,7 @@ class _AgendaScreenState extends State<AgendaScreen> {
       ),
     );
   }
-  
+
   // Helper method to build legend items
   Widget _buildLegendItem(String label, Color color) {
     return Container(

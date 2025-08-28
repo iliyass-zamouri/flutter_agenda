@@ -175,14 +175,74 @@ class _PillarContentState extends State<_PillarContent> {
   }
 
   EventTime tappedHour(double tapPosition, double itemHeight, int startHour) {
-    double hourCount = (tapPosition / itemHeight);
-    int hour = (startHour + hourCount.floor());
-    int minute = hourCount - hourCount.floor() >= 0.5 ? 30 : 0;
-    return SingleDayEventTime(hour: hour, minute: minute);
+    if (widget.agendaStyle.enableMultiDayEvents == true) {
+      // Multi-day tap position calculation
+      final startDate = widget.agendaStyle.timelineStartDate ?? DateTime.now();
+      final dayHeight = (widget.agendaStyle.endHour - widget.agendaStyle.startHour) * itemHeight;
+      final daySeparatorHeight = widget.agendaStyle.daySeparatorHeight ?? 40.0;
+      
+      double currentPosition = tapPosition;
+      int dayOffset = 0;
+      
+      // Find which day was tapped
+      while (currentPosition > dayHeight) {
+        currentPosition -= dayHeight;
+        if (dayOffset > 0) {
+          // Account for day separator (not present before first day)
+          currentPosition -= daySeparatorHeight;
+        }
+        dayOffset++;
+        
+        // Prevent infinite loop
+        if (dayOffset > 100) break;
+      }
+      
+      // Calculate hour within the day
+      double hourCount = (currentPosition / itemHeight);
+      int hour = (startHour + hourCount.floor());
+      int minute = hourCount - hourCount.floor() >= 0.5 ? 30 : 0;
+      
+      // Create DateTime-based event time for the specific day
+      final tappedDate = startDate.add(Duration(days: dayOffset));
+      return DateTimeEventTime.fromComponents(
+        year: tappedDate.year,
+        month: tappedDate.month,
+        day: tappedDate.day,
+        hour: hour,
+        minute: minute,
+      );
+    } else {
+      // Single day tap calculation (original logic)
+      double hourCount = (tapPosition / itemHeight);
+      int hour = (startHour + hourCount.floor());
+      int minute = hourCount - hourCount.floor() >= 0.5 ? 30 : 0;
+      return SingleDayEventTime(hour: hour, minute: minute);
+    }
   }
 
   double height() {
-    return (widget.agendaStyle.endHour - widget.agendaStyle.startHour) *
-        widget.agendaStyle.timeSlot.height;
+    if (widget.agendaStyle.enableMultiDayEvents == true) {
+      // Multi-day timeline height calculation
+      final startDate = widget.agendaStyle.timelineStartDate ?? DateTime.now();
+      final endDate = widget.agendaStyle.timelineEndDate ?? startDate.add(const Duration(days: 1));
+      
+      // Calculate number of days
+      final daysCount = endDate.difference(startDate).inDays + 1;
+      
+      // Calculate height per day
+      final dayHeight = (widget.agendaStyle.endHour - widget.agendaStyle.startHour) * 
+                       widget.agendaStyle.timeSlot.height;
+      
+      // Calculate day separator height
+      final daySeparatorHeight = widget.agendaStyle.daySeparatorHeight ?? 40.0;
+      
+      // Total height = (days * day height) + (separators * separator height)
+      // Note: first day doesn't have a separator before it
+      return (daysCount * dayHeight) + ((daysCount - 1) * daySeparatorHeight);
+    } else {
+      // Single day height calculation (original logic)
+      return (widget.agendaStyle.endHour - widget.agendaStyle.startHour) *
+          widget.agendaStyle.timeSlot.height;
+    }
   }
 }

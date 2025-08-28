@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_agenda/src/models/agenda_event.dart';
 import 'package:flutter_agenda/src/models/time_slot.dart';
+import 'package:flutter_agenda/src/models/event_time.dart';
 import 'package:flutter_agenda/src/styles/agenda_style.dart';
 import 'package:flutter_agenda/src/utils/utils.dart';
 
@@ -62,9 +63,36 @@ class EventView extends StatelessWidget {
   }
 
   double top() {
-    return calculateTopOffset(
-            event.start.hour, event.start.minute, agendaStyle.timeSlot.height) -
-        agendaStyle.startHour * agendaStyle.timeSlot.height;
+    if (agendaStyle.enableMultiDayEvents == true && 
+        event.start is DateTimeEventTime) {
+      // Multi-day event positioning
+      final startDateTime = (event.start as DateTimeEventTime).dateTime;
+      final timelineStartDate = agendaStyle.timelineStartDate ?? DateTime.now();
+      
+      // Calculate days offset from the start of the timeline
+      final timelineStart = DateTime(timelineStartDate.year, timelineStartDate.month, timelineStartDate.day);
+      final eventStart = DateTime(startDateTime.year, startDateTime.month, startDateTime.day);
+      final daysOffset = eventStart.difference(timelineStart).inDays;
+      
+      // Calculate day separator height to account for
+      final daySeparatorHeight = agendaStyle.daySeparatorHeight ?? 40.0;
+      final dayHeight = (agendaStyle.endHour - agendaStyle.startHour) * agendaStyle.timeSlot.height;
+      
+      // Calculate time offset within the day
+      final timeOffset = calculateTopOffset(
+        startDateTime.hour, 
+        startDateTime.minute, 
+        agendaStyle.timeSlot.height
+      ) - agendaStyle.startHour * agendaStyle.timeSlot.height;
+      
+      // Return total position: (days * (day height + separator)) + time offset
+      return (daysOffset * (dayHeight + (daysOffset > 0 ? daySeparatorHeight : 0))) + timeOffset;
+    } else {
+      // Single day event positioning (existing logic)
+      return calculateTopOffset(
+              event.start.hour, event.start.minute, agendaStyle.timeSlot.height) -
+          agendaStyle.startHour * agendaStyle.timeSlot.height;
+    }
   }
 
   double height() {
