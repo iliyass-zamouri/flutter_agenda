@@ -1,3 +1,12 @@
+## [5.0.1] - 2024-01-15
+* **📚 Enhanced Documentation**: Comprehensive README update showcasing multi-day events
+* **🎯 Usage Examples**: Added detailed examples for single-day and multi-day scenarios
+* **🔧 Configuration Guide**: Complete configuration examples for 24/7 operations
+* **🚀 Use Cases**: Real-world examples (Healthcare, Manufacturing, Events, Support)
+* **🔄 Migration Guide**: Clear instructions for upgrading from v4.x to v5.0
+* **⚡ Performance Tips**: State management optimization guidance
+* **🌟 Feature Highlights**: Improved feature showcase and professional presentation
+
 ## [5.0.0] - 2024-01-15
 * **🎉 MAJOR FEATURE**: Full Multi-Day Timeline Support - Perfect for 24/7 operations!
 * **BREAKING CHANGE**: Enhanced event models for multi-day support
