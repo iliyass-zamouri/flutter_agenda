@@ -189,7 +189,15 @@ class BackgroundPainter extends CustomPainter {
     return (agendaStyle.mainBackgroundColor !=
             oldDayViewBackgroundPainter.agendaStyle.mainBackgroundColor ||
         agendaStyle.timelineBorderColor !=
-            oldDayViewBackgroundPainter.agendaStyle.timelineBorderColor);
+            oldDayViewBackgroundPainter.agendaStyle.timelineBorderColor ||
+        agendaStyle.timeSlot.height !=
+            oldDayViewBackgroundPainter.agendaStyle.timeSlot.height ||
+        agendaStyle.decorationLineHeight !=
+            oldDayViewBackgroundPainter.agendaStyle.decorationLineHeight ||
+        agendaStyle.daySeparatorHeight !=
+            oldDayViewBackgroundPainter.agendaStyle.daySeparatorHeight ||
+        agendaStyle.enableMultiDayEvents !=
+            oldDayViewBackgroundPainter.agendaStyle.enableMultiDayEvents);
   }
 
   double calculateTopOffset(int hour) => hour * agendaStyle.timeSlot.height;

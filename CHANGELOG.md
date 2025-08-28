@@ -1,3 +1,21 @@
+## [5.0.5] - 2024-01-15
+* **🎉 MAJOR FIX**: Completely resolved timeslot changes when scrolled - events and painting now update perfectly
+* **🔑 Widget Keys Solution**: Added unique keys to all timeline and event widgets including timeslot height
+* **🔄 Force Rebuilds**: Timeline ListView and hour items now recreate properly on timeslot changes
+* **🎨 Background Sync**: CustomPaint widgets with keys ensure perfect background alignment
+* **⚡ State Management**: Fixed AgendaStateController to properly update style references
+* **📐 Perfect Positioning**: Events now correctly recalculate positions regardless of scroll position
+* **🎯 Complete Solution**: All components (timeline, events, background) now synchronize perfectly
+
+## [5.0.4] - 2024-01-15
+* **🔥 CRITICAL FIX**: Fixed timeslot changes when scrolled - events and painting now update correctly
+* **🛠️ State Management**: Fixed AgendaStateController to actually update style reference on changes
+* **🔄 Rebuild Logic**: Fixed OptimizedPillarView to properly rebuild when timeslot type changes
+* **⚡ Layout Detection**: Enhanced layout-affecting change detection for timeslot, multi-day, and separator changes
+* **🎯 Resource Invalidation**: Timeslot changes now properly mark all resources as changed for full rebuild
+* **📐 Positioning Fix**: Events now correctly recalculate positions when timeslot changes while scrolled
+* **🎨 Paint Sync**: Background painter now properly rebuilds and aligns with new timeslot heights
+
 ## [5.0.3] - 2024-01-15
 * **🎨 Clean Day Separators**: Fixed background painter to never paint over day name areas for ALL timeslot types
 * **🔧 Strict Boundary Checking**: Enhanced painting logic with precise day area boundaries

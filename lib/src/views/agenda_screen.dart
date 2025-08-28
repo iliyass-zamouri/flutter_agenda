@@ -261,6 +261,7 @@ class _FlutterAgendaState extends State<FlutterAgenda> {
       child: ScrollConfiguration(
         behavior: NoGlowScroll(),
         child: ListView(
+          key: ValueKey('timeline_list_${widget.agendaStyle.timeSlot.height}_${widget.agendaStyle.enableMultiDayEvents}'),
           controller: _verticalScrollControllers[0],
           scrollDirection: Axis.vertical,
           physics: ClampingScrollPhysics(),
@@ -344,6 +345,7 @@ class _FlutterAgendaState extends State<FlutterAgenda> {
 
   Widget _buildTimelineHourItem(int hour) {
     return Container(
+      key: ValueKey('timeline_${hour}_${widget.agendaStyle.timeSlot.height}'),
       height: widget.agendaStyle.timeSlot.height,
       decoration: BoxDecoration(
         border: Border(

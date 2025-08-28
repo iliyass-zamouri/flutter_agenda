@@ -3,7 +3,7 @@ import 'package:flutter_agenda/flutter_agenda.dart';
 
 class AgendaStateController extends ChangeNotifier {
   final List<Resource> _resources;
-  final AgendaStyle _agendaStyle;
+  AgendaStyle _agendaStyle;
   
   AgendaStateController({
     required List<Resource> resources,
@@ -89,19 +89,28 @@ class AgendaStateController extends ChangeNotifier {
   void updateAgendaStyle(AgendaStyle newStyle) {
     if (_agendaStyle == newStyle) return;
     
-    // Check if style changes affect layout
-    if (_agendaStyle.startHour != newStyle.startHour ||
+    // Check if style changes affect layout (especially timeslot changes)
+    bool layoutAffectingChange = (_agendaStyle.startHour != newStyle.startHour ||
         _agendaStyle.endHour != newStyle.endHour ||
         _agendaStyle.timeSlot != newStyle.timeSlot ||
         _agendaStyle.headersPosition != newStyle.headersPosition ||
-        _agendaStyle.direction != newStyle.direction) {
-      _styleChanged = true;
+        _agendaStyle.direction != newStyle.direction ||
+        _agendaStyle.enableMultiDayEvents != newStyle.enableMultiDayEvents ||
+        _agendaStyle.daySeparatorHeight != newStyle.daySeparatorHeight);
+    
+    // CRITICAL: Actually update the style reference
+    _agendaStyle = newStyle;
+    _styleChanged = true;
+    
+    // If layout is affected (like timeslot changes), mark ALL resources as changed
+    // This ensures all pillar views rebuild with the new timeslot height
+    if (layoutAffectingChange) {
+      _changedResourceIndices.clear();
+      for (int i = 0; i < _resources.length; i++) {
+        _changedResourceIndices.add(i);
+      }
     }
     
-    // Update the style reference
-    // Note: This is a simplified approach. In a real implementation,
-    // you might want to create a new instance or use a different pattern
-    _styleChanged = true;
     notifyListeners();
   }
 

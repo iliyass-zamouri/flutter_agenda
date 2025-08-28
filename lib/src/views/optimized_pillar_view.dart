@@ -29,11 +29,8 @@ class OptimizedPillarView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Only rebuild if this specific pillar has changed
-    if (!hasChanged) {
-      return _buildPillarContent();
-    }
-    
+    // Always rebuild the pillar content to ensure timeslot changes are reflected
+    // The hasChanged optimization will be handled at a lower level if needed
     return _buildPillarContent();
   }
 
@@ -155,14 +152,18 @@ class _PillarContentState extends State<_PillarContent> {
             ...[
               Positioned.fill(
                 child: CustomPaint(
+                  key: ValueKey('bg_${widget.agendaStyle.timeSlot.height}_${widget.agendaStyle.enableMultiDayEvents}'),
                   painter: BackgroundPainter(
                     agendaStyle: widget.agendaStyle,
                   ),
                 ),
               )
             ],
-            ...widget.events.map((event) {
+            ...widget.events.asMap().entries.map((entry) {
+              final index = entry.key;
+              final event = entry.value;
               return EventView(
+                key: ValueKey('${event.title}_${event.start.getDisplayText()}_${widget.agendaStyle.timeSlot.height}'),
                 event: event,
                 lenght: widget.length,
                 agendaStyle: widget.agendaStyle,
@@ -175,10 +176,13 @@ class _PillarContentState extends State<_PillarContent> {
   }
 
   EventTime tappedHour(double tapPosition, double itemHeight, int startHour) {
+    // CRITICAL: Always use the current timeslot height from agendaStyle, not the passed itemHeight
+    final currentTimeSlotHeight = widget.agendaStyle.timeSlot.height;
+    
     if (widget.agendaStyle.enableMultiDayEvents == true) {
       // Multi-day tap position calculation
       final startDate = widget.agendaStyle.timelineStartDate ?? DateTime.now();
-      final dayHeight = (widget.agendaStyle.endHour - widget.agendaStyle.startHour) * itemHeight;
+      final dayHeight = (widget.agendaStyle.endHour - widget.agendaStyle.startHour) * currentTimeSlotHeight;
       final daySeparatorHeight = widget.agendaStyle.daySeparatorHeight ?? 40.0;
       
       double currentPosition = tapPosition;
@@ -198,7 +202,7 @@ class _PillarContentState extends State<_PillarContent> {
       }
       
       // Calculate hour within the day with precise minute calculation
-      double hourCount = (currentPosition / itemHeight);
+      double hourCount = (currentPosition / currentTimeSlotHeight);
       int hour = (startHour + hourCount.floor());
       double minuteDecimal = (hourCount - hourCount.floor()) * 60;
       int minute = (minuteDecimal / 15).round() * 15; // Round to nearest 15-minute interval
@@ -220,7 +224,7 @@ class _PillarContentState extends State<_PillarContent> {
       );
     } else {
       // Single day tap calculation with precise minute calculation
-      double hourCount = (tapPosition / itemHeight);
+      double hourCount = (tapPosition / currentTimeSlotHeight);
       int hour = (startHour + hourCount.floor());
       double minuteDecimal = (hourCount - hourCount.floor()) * 60;
       int minute = (minuteDecimal / 15).round() * 15; // Round to nearest 15-minute interval
