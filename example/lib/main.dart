@@ -38,14 +38,14 @@ class _AgendaScreenState extends State<AgendaScreen> {
             title: 'Meeting D',
             subtitle: 'B',
             backgroundColor: Colors.red,
-            start: EventTime(hour: 15, minute: 0),
-            end: EventTime(hour: 16, minute: 30),
+            start: SingleDayEventTime(hour: 15, minute: 0),
+            end: SingleDayEventTime(hour: 16, minute: 30),
           ),
           AgendaEvent(
             title: 'Meeting Z',
             subtitle: 'MZ',
-            start: EventTime(hour: 12, minute: 0),
-            end: EventTime(hour: 13, minute: 20),
+            start: SingleDayEventTime(hour: 12, minute: 0),
+            end: SingleDayEventTime(hour: 13, minute: 20),
           ),
         ],
       ),
@@ -56,8 +56,8 @@ class _AgendaScreenState extends State<AgendaScreen> {
             title: 'Meeting G',
             subtitle: 'MG',
             backgroundColor: Colors.yellowAccent,
-            start: EventTime(hour: 9, minute: 10),
-            end: EventTime(hour: 11, minute: 45),
+            start: SingleDayEventTime(hour: 9, minute: 10),
+            end: SingleDayEventTime(hour: 11, minute: 45),
           ),
         ],
       ),
@@ -67,10 +67,44 @@ class _AgendaScreenState extends State<AgendaScreen> {
           AgendaEvent(
             title: 'Meeting A',
             subtitle: 'MA',
-            start: EventTime(hour: 10, minute: 10),
-            end: EventTime(hour: 11, minute: 45),
+            start: SingleDayEventTime(hour: 10, minute: 10),
+            end: SingleDayEventTime(hour: 11, minute: 45),
             onTap: () {
               print("meeting A Details");
+            },
+          ),
+          // Multi-day event example: Monday 22:00 to Tuesday 03:00
+          MultiDayAgendaEvent.spanningDays(
+            title: 'Night Shift',
+            subtitle: '24/7 Support',
+            startDate: DateTime.now().add(const Duration(days: 1)).copyWith(
+              hour: 22,
+              minute: 0,
+            ),
+            endDate: DateTime.now().add(const Duration(days: 2)).copyWith(
+              hour: 3,
+              minute: 0,
+            ),
+            backgroundColor: Colors.purple,
+            onTap: () {
+              print("Night Shift Details - Multi-day event!");
+            },
+          ),
+          // Another multi-day event: Wednesday 18:00 to Friday 12:00
+          MultiDayAgendaEvent.spanningDays(
+            title: 'Conference',
+            subtitle: 'Tech Summit',
+            startDate: DateTime.now().add(const Duration(days: 3)).copyWith(
+              hour: 18,
+              minute: 0,
+            ),
+            endDate: DateTime.now().add(const Duration(days: 5)).copyWith(
+              hour: 12,
+              minute: 0,
+            ),
+            backgroundColor: Colors.orange,
+            onTap: () {
+              print("Conference Details - Multi-day event!");
             },
           ),
         ],
@@ -109,8 +143,8 @@ class _AgendaScreenState extends State<AgendaScreen> {
                               AgendaEvent(
                                 title: 'Meeting A',
                                 subtitle: 'MA',
-                                start: EventTime(hour: 10, minute: 10),
-                                end: EventTime(hour: 11, minute: 45),
+                                start: SingleDayEventTime(hour: 10, minute: 10),
+                                end: SingleDayEventTime(hour: 11, minute: 45),
                                 onTap: () {
                                   print("meeting A Details");
                                 },
@@ -123,8 +157,8 @@ class _AgendaScreenState extends State<AgendaScreen> {
                               AgendaEvent(
                                 title: 'Meeting A',
                                 subtitle: 'MA',
-                                start: EventTime(hour: 10, minute: 10),
-                                end: EventTime(hour: 11, minute: 45),
+                                start: SingleDayEventTime(hour: 10, minute: 10),
+                                end: SingleDayEventTime(hour: 11, minute: 45),
                                 onTap: () {
                                   print("meeting A Details");
                                 },
@@ -150,8 +184,8 @@ class _AgendaScreenState extends State<AgendaScreen> {
                         resources.first.events.add(AgendaEvent(
                           title: 'Meeting A',
                           subtitle: 'MA',
-                          start: EventTime(hour: 9, minute: 0),
-                          end: EventTime(hour: 11, minute: 45),
+                          start: SingleDayEventTime(hour: 9, minute: 0),
+                          end: SingleDayEventTime(hour: 11, minute: 45),
                           onTap: () {
                             print("meeting A Details");
                           },
@@ -211,13 +245,19 @@ class _AgendaScreenState extends State<AgendaScreen> {
                   resources: resources,
                   agendaStyle: AgendaStyle(
                     direction: TextDirection.ltr,
-                    startHour: 9,
-                    endHour: 20,
+                    startHour: 0, // Start from midnight for 24/7 support
+                    endHour: 24, // End at midnight for full day coverage
                     headerLogo: HeaderLogo.bar,
                     fittedWidth: false,
                     timeItemWidth: 45,
                     timeSlot: _selectedTimeSlot,
                     headersPosition: HeadersPosition.bottom, // Move headers to bottom
+                    enableMultiDayEvents: true, // Enable multi-day event support
+                    timelineStartDate: DateTime.now(), // Start from today
+                    timelineEndDate: DateTime.now().add(const Duration(days: 7)), // Show 7 days
+                    daySeparatorHeight: 50.0, // Height of day separators
+                    daySeparatorColor: Colors.grey[100], // Light grey background
+                    daySeparatorBorderColor: Colors.grey[400]!, // Darker grey borders
                   ),
                   // the click else where (other than an event because it has it's own onTap parameter)
                   // you get the object linked to the head object of the pillar which could be you project costume object
@@ -234,7 +274,7 @@ class _AgendaScreenState extends State<AgendaScreen> {
                           title: 'Meeting A',
                           subtitle: 'MA',
                           start: clickedTime,
-                          end: EventTime(
+                          end: SingleDayEventTime(
                               hour: clickedTime.hour + 1,
                               minute: clickedTime.minute),
                           onTap: () {

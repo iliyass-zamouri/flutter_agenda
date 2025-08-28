@@ -39,6 +39,15 @@ class AgendaStyle {
     this.visibleTimeBorder = true,
     this.visibleDecorationBorder = true,
     this.headersPosition = HeadersPosition.top,
+    this.daySeparatorHeight,
+    this.daySeparatorColor,
+    this.daySeparatorBorderColor,
+    this.daySeparatorTextStyle,
+    this.daySeparatorSubtextStyle,
+    this.daySeparatorIndicatorColor,
+    this.enableMultiDayEvents = false,
+    this.timelineStartDate,
+    this.timelineEndDate,
   });
 
   final TextDirection direction;
@@ -143,4 +152,33 @@ class AgendaStyle {
   
   /// position of the headers (top or bottom of the screen)
   final HeadersPosition headersPosition;
+  
+  /// Multi-day event support properties
+  
+  /// Height of day separators in the timeline
+  final double? daySeparatorHeight;
+  
+  /// Color of day separator backgrounds
+  final Color? daySeparatorColor;
+  
+  /// Color of day separator borders
+  final Color? daySeparatorBorderColor;
+  
+  /// Text style for day separator titles
+  final TextStyle? daySeparatorTextStyle;
+  
+  /// Text style for day separator subtitles (date)
+  final TextStyle? daySeparatorSubtextStyle;
+  
+  /// Color of day separator indicators
+  final Color? daySeparatorIndicatorColor;
+  
+  /// Whether to enable multi-day event support
+  final bool enableMultiDayEvents;
+  
+  /// Start date for multi-day timeline (defaults to current date)
+  final DateTime? timelineStartDate;
+  
+  /// End date for multi-day timeline (defaults to current date + 1 day)
+  final DateTime? timelineEndDate;
 }

@@ -178,7 +178,7 @@ class _PillarContentState extends State<_PillarContent> {
     double hourCount = (tapPosition / itemHeight);
     int hour = (startHour + hourCount.floor());
     int minute = hourCount - hourCount.floor() >= 0.5 ? 30 : 0;
-    return EventTime(hour: hour, minute: minute);
+    return SingleDayEventTime(hour: hour, minute: minute);
   }
 
   double height() {

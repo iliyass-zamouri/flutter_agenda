@@ -68,7 +68,7 @@ class EventView extends StatelessWidget {
   }
 
   double height() {
-    return calculateTopOffset(0, event.end.difference(event.start).inMinutes,
+    return calculateTopOffset(0, event.end.differenceInMinutes(event.start),
             agendaStyle.timeSlot.height) +
         1;
   }
