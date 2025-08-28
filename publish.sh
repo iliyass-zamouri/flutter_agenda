@@ -53,7 +53,7 @@ git push origin main
 
 # Publish to pub.dev
 echo "📤 Publishing to pub.dev..."
-dart pub publish
+flutter pub publish
 
 echo ""
 echo "🎉 Publishing completed successfully!"
