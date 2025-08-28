@@ -85,8 +85,11 @@ class EventView extends StatelessWidget {
         agendaStyle.timeSlot.height
       ) - agendaStyle.startHour * agendaStyle.timeSlot.height;
       
-      // Return total position: (days * (day height + separator)) + time offset
-      return (daysOffset * (dayHeight + (daysOffset > 0 ? daySeparatorHeight : 0))) + timeOffset;
+      // Calculate total separators before this day (first day has no separator before it)
+      final totalSeparatorHeight = daysOffset > 0 ? daysOffset * daySeparatorHeight : 0.0;
+      
+      // Return total position: (days * day height) + total separators + time offset
+      return (daysOffset * dayHeight) + totalSeparatorHeight + timeOffset;
     } else {
       // Single day event positioning (existing logic)
       return calculateTopOffset(

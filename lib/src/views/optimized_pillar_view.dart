@@ -197,10 +197,17 @@ class _PillarContentState extends State<_PillarContent> {
         if (dayOffset > 100) break;
       }
       
-      // Calculate hour within the day
+      // Calculate hour within the day with precise minute calculation
       double hourCount = (currentPosition / itemHeight);
       int hour = (startHour + hourCount.floor());
-      int minute = hourCount - hourCount.floor() >= 0.5 ? 30 : 0;
+      double minuteDecimal = (hourCount - hourCount.floor()) * 60;
+      int minute = (minuteDecimal / 15).round() * 15; // Round to nearest 15-minute interval
+      
+      // Handle minute overflow
+      if (minute >= 60) {
+        minute = 0;
+        hour += 1;
+      }
       
       // Create DateTime-based event time for the specific day
       final tappedDate = startDate.add(Duration(days: dayOffset));
@@ -212,10 +219,18 @@ class _PillarContentState extends State<_PillarContent> {
         minute: minute,
       );
     } else {
-      // Single day tap calculation (original logic)
+      // Single day tap calculation with precise minute calculation
       double hourCount = (tapPosition / itemHeight);
       int hour = (startHour + hourCount.floor());
-      int minute = hourCount - hourCount.floor() >= 0.5 ? 30 : 0;
+      double minuteDecimal = (hourCount - hourCount.floor()) * 60;
+      int minute = (minuteDecimal / 15).round() * 15; // Round to nearest 15-minute interval
+      
+      // Handle minute overflow
+      if (minute >= 60) {
+        minute = 0;
+        hour += 1;
+      }
+      
       return SingleDayEventTime(hour: hour, minute: minute);
     }
   }

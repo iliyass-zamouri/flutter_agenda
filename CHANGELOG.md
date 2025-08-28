@@ -1,3 +1,11 @@
+## [5.0.2] - 2024-01-15
+* **🎯 Fixed Event Positioning**: Corrected multi-day event positioning with proper day separator calculations
+* **⏰ Enhanced Minute Precision**: Improved tap detection to support 15-minute intervals (not just 30-minute)
+* **🔧 Timeline Alignment**: Fixed alignment issues between events, timeslots, and pillars
+* **📐 Precise Calculations**: Events now position correctly at specific times (e.g., 10:15, 14:45)
+* **🚀 Multi-Day Accuracy**: Multi-day events now align perfectly across day boundaries
+* **⚡ Performance**: Optimized positioning calculations for better rendering accuracy
+
 ## [5.0.1] - 2024-01-15
 * **📚 Enhanced Documentation**: Comprehensive README update showcasing multi-day events
 * **🎯 Usage Examples**: Added detailed examples for single-day and multi-day scenarios
