@@ -13,6 +13,40 @@ class MyApp extends StatelessWidget {
       home: AgendaScreen(),
     );
   }
+  
+  // Helper method to build legend items
+  Widget _buildLegendItem(String label, Color color) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.2),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withOpacity(0.5)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 12,
+            height: 12,
+            decoration: BoxDecoration(
+              color: color,
+              shape: BoxShape.circle,
+            ),
+          ),
+          const SizedBox(width: 4),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: color.withOpacity(0.8),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class AgendaScreen extends StatefulWidget {
@@ -30,82 +64,128 @@ class _AgendaScreenState extends State<AgendaScreen> {
   @override
   void initState() {
     super.initState();
+    
+    // Get current date for consistent examples
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    
     resources = [
       Resource(
-        head: Header(title: 'Resource 1', subtitle: '3 Appointments', object: 1),
+        head: Header(title: '24/7 Support Team', subtitle: 'Multi-day Operations', object: 1, color: Colors.blue),
         events: [
+          // Single-day event (traditional way)
           AgendaEvent(
-            title: 'Meeting D',
-            subtitle: 'B',
-            backgroundColor: Colors.red,
-            start: SingleDayEventTime(hour: 15, minute: 0),
-            end: SingleDayEventTime(hour: 16, minute: 30),
+            title: 'Morning Standup',
+            subtitle: 'Daily Sync',
+            backgroundColor: Colors.green,
+            start: SingleDayEventTime(hour: 9, minute: 0),
+            end: SingleDayEventTime(hour: 9, minute: 30),
+            onTap: () => print("Morning Standup - Single day event"),
           ),
-          AgendaEvent(
-            title: 'Meeting Z',
-            subtitle: 'MZ',
-            start: SingleDayEventTime(hour: 12, minute: 0),
-            end: SingleDayEventTime(hour: 13, minute: 20),
-          ),
-        ],
-      ),
-      Resource(
-        head: Header(title: 'Resource 2', object: 2),
-        events: [
-          AgendaEvent(
-            title: 'Meeting G',
-            subtitle: 'MG',
-            backgroundColor: Colors.yellowAccent,
-            start: SingleDayEventTime(hour: 9, minute: 10),
-            end: SingleDayEventTime(hour: 11, minute: 45),
-          ),
-        ],
-      ),
-      Resource(
-        head: Header(title: 'Resource 3', object: 3, color: Colors.yellow),
-        events: [
-          AgendaEvent(
-            title: 'Meeting A',
-            subtitle: 'MA',
-            start: SingleDayEventTime(hour: 10, minute: 10),
-            end: SingleDayEventTime(hour: 11, minute: 45),
-            onTap: () {
-              print("meeting A Details");
-            },
-          ),
-          // Multi-day event example: Monday 22:00 to Tuesday 03:00
+          
+          // Multi-day event: Night shift spanning midnight
           MultiDayAgendaEvent.spanningDays(
-            title: 'Night Shift',
-            subtitle: '24/7 Support',
-            startDate: DateTime.now().add(const Duration(days: 1)).copyWith(
-              hour: 22,
-              minute: 0,
-            ),
-            endDate: DateTime.now().add(const Duration(days: 2)).copyWith(
-              hour: 3,
-              minute: 0,
-            ),
-            backgroundColor: Colors.purple,
-            onTap: () {
-              print("Night Shift Details - Multi-day event!");
-            },
+            title: 'Night Shift 1',
+            subtitle: '22:00 → 06:00 (Cross-day)',
+            startDate: today.add(const Duration(days: 1)).copyWith(hour: 22, minute: 0),
+            endDate: today.add(const Duration(days: 2)).copyWith(hour: 6, minute: 0),
+            backgroundColor: Colors.indigo,
+            onTap: () => print("Night Shift 1 - Multi-day event spanning midnight!"),
           ),
-          // Another multi-day event: Wednesday 18:00 to Friday 12:00
+          
+          // Multi-day event: Long conference
           MultiDayAgendaEvent.spanningDays(
-            title: 'Conference',
-            subtitle: 'Tech Summit',
-            startDate: DateTime.now().add(const Duration(days: 3)).copyWith(
-              hour: 18,
-              minute: 0,
-            ),
-            endDate: DateTime.now().add(const Duration(days: 5)).copyWith(
-              hour: 12,
-              minute: 0,
-            ),
+            title: 'Tech Conference 2024',
+            subtitle: '3-Day Event',
+            startDate: today.add(const Duration(days: 3)).copyWith(hour: 9, minute: 0),
+            endDate: today.add(const Duration(days: 5)).copyWith(hour: 18, minute: 0),
             backgroundColor: Colors.orange,
-            onTap: () {
-              print("Conference Details - Multi-day event!");
-            },
+            onTap: () => print("Tech Conference - 3-day multi-day event!"),
+          ),
+        ],
+      ),
+      
+      Resource(
+        head: Header(title: 'Maintenance Team', subtitle: 'System Operations', object: 2, color: Colors.red),
+        events: [
+          // Multi-day event: Maintenance window
+          MultiDayAgendaEvent.spanningDays(
+            title: 'System Maintenance',
+            subtitle: 'Database Update',
+            startDate: today.add(const Duration(days: 2)).copyWith(hour: 23, minute: 0),
+            endDate: today.add(const Duration(days: 3)).copyWith(hour: 5, minute: 0),
+            backgroundColor: Colors.red,
+            onTap: () => print("System Maintenance - Overnight multi-day event!"),
+          ),
+          
+          // Single-day event
+          AgendaEvent(
+            title: 'Security Audit',
+            subtitle: 'Monthly Review',
+            backgroundColor: Colors.amber,
+            start: SingleDayEventTime(hour: 14, minute: 0),
+            end: SingleDayEventTime(hour: 16, minute: 0),
+            onTap: () => print("Security Audit - Single day event"),
+          ),
+        ],
+      ),
+      
+      Resource(
+        head: Header(title: 'Development Team', subtitle: 'Project Work', object: 3, color: Colors.green),
+        events: [
+          // Multi-day event: Sprint planning
+          MultiDayAgendaEvent.spanningDays(
+            title: 'Sprint Planning',
+            subtitle: '2-Day Workshop',
+            startDate: today.add(const Duration(days: 4)).copyWith(hour: 10, minute: 0),
+            endDate: today.add(const Duration(days: 5)).copyWith(hour: 16, minute: 0),
+            backgroundColor: Colors.teal,
+            onTap: () => print("Sprint Planning - 2-day multi-day event!"),
+          ),
+          
+          // Multi-day event: Code freeze
+          MultiDayAgendaEvent.spanningDays(
+            title: 'Code Freeze',
+            subtitle: 'Release Preparation',
+            startDate: today.add(const Duration(days: 6)).copyWith(hour: 18, minute: 0),
+            endDate: today.add(const Duration(days: 7)).copyWith(hour: 12, minute: 0),
+            backgroundColor: Colors.purple,
+            onTap: () => print("Code Freeze - Release preparation multi-day event!"),
+          ),
+          
+          // Single-day event
+          AgendaEvent(
+            title: 'Code Review',
+            subtitle: 'Daily PRs',
+            backgroundColor: Colors.blue,
+            start: SingleDayEventTime(hour: 15, minute: 0),
+            end: SingleDayEventTime(hour: 16, minute: 0),
+            onTap: () => print("Code Review - Single day event"),
+          ),
+        ],
+      ),
+      
+      Resource(
+        head: Header(title: 'Customer Support', subtitle: '24/7 Coverage', object: 4, color: Colors.purple),
+        events: [
+          // Multi-day event: Weekend coverage
+          MultiDayAgendaEvent.spanningDays(
+            title: 'Weekend Support',
+            subtitle: '48-Hour Coverage',
+            startDate: today.add(const Duration(days: 5)).copyWith(hour: 0, minute: 0),
+            endDate: today.add(const Duration(days: 7)).copyWith(hour: 0, minute: 0),
+            backgroundColor: Colors.deepPurple,
+            onTap: () => print("Weekend Support - 48-hour multi-day event!"),
+          ),
+          
+          // Multi-day event: Holiday coverage
+          MultiDayAgendaEvent.spanningDays(
+            title: 'Holiday Coverage',
+            subtitle: 'Extended Hours',
+            startDate: today.add(const Duration(days: 8)).copyWith(hour: 8, minute: 0),
+            endDate: today.add(const Duration(days: 10)).copyWith(hour: 20, minute: 0),
+            backgroundColor: Colors.deepOrange,
+            onTap: () => print("Holiday Coverage - Extended multi-day event!"),
           ),
         ],
       ),
@@ -241,51 +321,142 @@ class _AgendaScreenState extends State<AgendaScreen> {
               ? Center(
                   child: CircularProgressIndicator(),
                 )
-              : FlutterAgenda(
-                  resources: resources,
-                  agendaStyle: AgendaStyle(
-                    direction: TextDirection.ltr,
-                    startHour: 0, // Start from midnight for 24/7 support
-                    endHour: 24, // End at midnight for full day coverage
-                    headerLogo: HeaderLogo.bar,
-                    fittedWidth: false,
-                    timeItemWidth: 45,
-                    timeSlot: _selectedTimeSlot,
-                    headersPosition: HeadersPosition.bottom, // Move headers to bottom
-                    enableMultiDayEvents: true, // Enable multi-day event support
-                    timelineStartDate: DateTime.now(), // Start from today
-                    timelineEndDate: DateTime.now().add(const Duration(days: 7)), // Show 7 days
-                    daySeparatorHeight: 50.0, // Height of day separators
-                    daySeparatorColor: Colors.grey[100], // Light grey background
-                    daySeparatorBorderColor: Colors.grey[400]!, // Darker grey borders
-                  ),
-                  // the click else where (other than an event because it has it's own onTap parameter)
-                  // you get the object linked to the head object of the pillar which could be you project costume object
-                  // and the cliked time
-                  onTap: (clickedTime, object) {
-                    print(
-                        "Clicked time: ${clickedTime.hour}:${clickedTime.minute}");
-                    print("Head Object related to the resource: $object");
-                    resources
-                        .where((resource) => resource.head.object == object)
-                        .first
-                        .events
-                        .add(AgendaEvent(
-                          title: 'Meeting A',
-                          subtitle: 'MA',
-                          start: clickedTime,
-                          end: SingleDayEventTime(
-                              hour: clickedTime.hour + 1,
-                              minute: clickedTime.minute),
-                          onTap: () {
-                            print("meeting A Details");
-                          },
-                        ));
+              : Column(
+                  children: [
+                    // Multi-day events showcase header
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16.0),
+                      decoration: BoxDecoration(
+                        color: Colors.blue[50],
+                        border: Border(
+                          bottom: BorderSide(color: Colors.blue[200]!, width: 1),
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(Icons.event, color: Colors.blue[700]),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Multi-Day Events Showcase',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blue[800],
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'This example demonstrates both single-day and multi-day events. '
+                            'Notice how events can span across days, perfect for 24/7 operations!',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.blue[700],
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Wrap(
+                            spacing: 8,
+                            children: [
+                              _buildLegendItem('Single Day', Colors.green),
+                              _buildLegendItem('Multi-Day', Colors.purple),
+                              _buildLegendItem('Cross-Midnight', Colors.indigo),
+                              _buildLegendItem('Long Duration', Colors.orange),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    
+                                        // Main agenda
+                    Expanded(
+                      child: FlutterAgenda(
+                        resources: resources,
+                        agendaStyle: AgendaStyle(
+                          direction: TextDirection.ltr,
+                          startHour: 0, // Start from midnight for 24/7 support
+                          endHour: 24, // End at midnight for full day coverage
+                          headerLogo: HeaderLogo.bar,
+                          fittedWidth: false,
+                          timeItemWidth: 45,
+                          timeSlot: _selectedTimeSlot,
+                          headersPosition: HeadersPosition.bottom, // Move headers to bottom
+                          enableMultiDayEvents: true, // Enable multi-day event support
+                          timelineStartDate: DateTime.now(), // Start from today
+                          timelineEndDate: DateTime.now().add(const Duration(days: 7)), // Show 7 days
+                          daySeparatorHeight: 50.0, // Height of day separators
+                          daySeparatorColor: Colors.grey[100], // Light grey background
+                          daySeparatorBorderColor: Colors.grey[400]!, // Darker grey borders
+                        ),
+                        // the click else where (other than an event because it has it's own onTap parameter)
+                        // you get the object linked to the head object of the pillar which could be you project costume object
+                        // and the cliked time
+                        onTap: (clickedTime, object) {
+                          print(
+                              "Clicked time: ${clickedTime.hour}:${clickedTime.minute}");
+                          print("Head Object related to the resource: $object");
+                          resources
+                              .where((resource) => resource.head.object == object)
+                              .first
+                              .events
+                              .add(AgendaEvent(
+                                title: 'Meeting A',
+                                subtitle: 'MA',
+                                start: clickedTime,
+                                end: SingleDayEventTime(
+                                    hour: clickedTime.hour + 1,
+                                    minute: clickedTime.minute),
+                                onTap: () {
+                                  print("meeting A Details");
+                                },
+                              ));
 
-                    setState(() {});
-                  },
+                          setState(() {});
+                        },
+                      ),
+                    ),
+                  ],
                 ),
         ),
+      ),
+    );
+  }
+  
+  // Helper method to build legend items
+  Widget _buildLegendItem(String label, Color color) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.2),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withOpacity(0.5)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 12,
+            height: 12,
+            decoration: BoxDecoration(
+              color: color,
+              shape: BoxShape.circle,
+            ),
+          ),
+          const SizedBox(width: 4),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: color.withOpacity(0.8),
+            ),
+          ),
+        ],
       ),
     );
   }
