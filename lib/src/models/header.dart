@@ -24,12 +24,12 @@ class Header {
     this.subtitle,
     this.object,
     this.onTap,
-    this.height: 40,
-    this.backgroundColor: Colors.white,
-    this.color: const Color(0xFF292B2F),
-    this.textStyle: const TextStyle(
+    this.height = 40,
+    this.backgroundColor = Colors.white,
+    this.color = const Color(0xFF292B2F),
+    this.textStyle = const TextStyle(
         color: Colors.black, fontWeight: FontWeight.w400, fontSize: 13),
-    this.subtitleStyle: const TextStyle(
+    this.subtitleStyle = const TextStyle(
         color: Color(0xFFA1A1A0), fontWeight: FontWeight.w300, fontSize: 10),
   });
 }

@@ -1,0 +1,4 @@
+enum HeadersPosition {
+  top,
+  bottom,
+}

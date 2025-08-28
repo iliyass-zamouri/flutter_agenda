@@ -1,3 +1,14 @@
+## [3.2.0] - 2024-01-15
+* **Major Performance Improvement**: Implemented efficient state management to prevent unnecessary rebuilds
+* **New State Controller**: Added `AgendaStateController` for resource-level change tracking
+* **Optimized Pillar Views**: Created `OptimizedPillarView` that only rebuilds when necessary
+* **Provider Integration**: Added provider dependency for efficient state management
+* **Headers Position Control**: Added `HeadersPosition` enum (top/bottom) for flexible header placement
+* **Scroll Physics Fix**: Replaced bouncing scroll physics with `ClampingScrollPhysics` for better UX
+* **Scroll Detection**: Added smart scroll detection to prevent accidental onTap events during scrolling
+* **English Translation**: Translated example app from Arabic to English
+* **Flutter 2.27.0+ Compatibility**: Updated dependencies and fixed null safety issues
+
 ## [3.1.0] - 2022-04-20
 * Support for ltr.
 

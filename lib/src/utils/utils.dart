@@ -13,7 +13,7 @@ class Utils {
   static double pillarWidth(int lenght, double timeWidth, double defaultWidth,
       Orientation orientation) {
     MediaQueryData mediaData =
-        MediaQueryData.fromWindow(WidgetsBinding.instance!.window);
+        MediaQueryData.fromView(WidgetsBinding.instance.window);
     double screenWidth = mediaData.size.width;
     switch (orientation) {
       case Orientation.portrait:

@@ -1,10 +1,11 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_agenda/flutter_agenda.dart';
 import 'package:flutter_agenda/src/styles/background_painter.dart';
 import 'package:flutter_agenda/src/utils/utils.dart';
 import 'package:flutter_agenda/src/views/event_view.dart';
 
-class PillarView extends StatelessWidget {
+class PillarView extends StatefulWidget {
   final dynamic headObject;
   final List<AgendaEvent> events;
   final int lenght;
@@ -23,22 +24,81 @@ class PillarView extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _PillarViewState createState() => _PillarViewState();
+}
+
+class _PillarViewState extends State<PillarView> {
+  bool _isScrolling = false;
+  Timer? _scrollEndTimer;
+  bool _hasScrolled = false;
+  double _lastScrollPosition = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollEndTimer?.cancel();
+    widget.scrollController.removeListener(_onScroll);
+    super.dispose();
+  }
+
+  void _onScroll() {
+    final currentPosition = widget.scrollController.position.pixels;
+    final delta = (currentPosition - _lastScrollPosition).abs();
+    
+    if (delta > 5.0) { // Threshold to detect actual scrolling
+      _hasScrolled = true;
+      if (!_isScrolling) {
+        setState(() {
+          _isScrolling = true;
+        });
+      }
+    }
+    
+    _lastScrollPosition = currentPosition;
+    
+    _scrollEndTimer?.cancel();
+    _scrollEndTimer = Timer(Duration(milliseconds: 300), () {
+      if (mounted) {
+        setState(() {
+          _isScrolling = false;
+          _hasScrolled = false;
+        });
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      controller: scrollController,
+      controller: widget.scrollController,
       physics: ClampingScrollPhysics(),
       child: GestureDetector(
-        onTapDown: (tapdetails) => callBack!(
-            tappedHour(tapdetails.localPosition.dy, agendaStyle.timeSlot.height,
-                agendaStyle.startHour),
-            headObject),
+        onTapDown: (TapDownDetails details) {
+          if (!_hasScrolled && widget.callBack != null) {
+            widget.callBack!(
+                tappedHour(details.localPosition.dy, widget.agendaStyle.timeSlot.height,
+                    widget.agendaStyle.startHour),
+                widget.headObject);
+          }
+        },
+        onPanStart: (DragStartDetails details) {
+          _hasScrolled = true;
+        },
+        onPanUpdate: (DragUpdateDetails details) {
+          _hasScrolled = true;
+        },
         child: Container(
           height: height(),
-          width: agendaStyle.fittedWidth
-              ? Utils.pillarWidth(lenght, agendaStyle.timeItemWidth,
-                  agendaStyle.pillarWidth, MediaQuery.of(context).orientation)
-              : agendaStyle.pillarWidth,
-          decoration: agendaStyle.pillarSeperator
+          width: widget.agendaStyle.fittedWidth
+              ? Utils.pillarWidth(widget.lenght, widget.agendaStyle.timeItemWidth,
+                  widget.agendaStyle.pillarWidth, MediaQuery.of(context).orientation)
+              : widget.agendaStyle.pillarWidth,
+          decoration: widget.agendaStyle.pillarSeperator
               ? BoxDecoration(
                   border: Border(left: BorderSide(color: Color(0xFFCECECE))))
               : BoxDecoration(),
@@ -48,16 +108,16 @@ class PillarView extends StatelessWidget {
                 Positioned.fill(
                   child: CustomPaint(
                     painter: BackgroundPainter(
-                      agendaStyle: agendaStyle,
+                      agendaStyle: widget.agendaStyle,
                     ),
                   ),
                 )
               ],
-              ...events.map((event) {
+              ...widget.events.map((event) {
                 return EventView(
                   event: event,
-                  lenght: lenght,
-                  agendaStyle: agendaStyle,
+                  lenght: widget.lenght,
+                  agendaStyle: widget.agendaStyle,
                 );
               }).toList(),
             ],
@@ -75,7 +135,7 @@ class PillarView extends StatelessWidget {
   }
 
   double height() {
-    return (agendaStyle.endHour - agendaStyle.startHour) *
-        agendaStyle.timeSlot.height;
+    return (widget.agendaStyle.endHour - widget.agendaStyle.startHour) *
+        widget.agendaStyle.timeSlot.height;
   }
 }
