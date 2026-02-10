@@ -486,10 +486,12 @@ class _AgendaScreenState extends State<AgendaScreen> {
                               .add(AgendaEvent(
                                 title: 'Meeting A',
                                 subtitle: 'MA',
-                                start: clickedTime,
+                                start: SingleDayEventTime(
+                                    hour: clickedTime.hour,
+                                    minute: clickedTime.minute),
                                 end: SingleDayEventTime(
                                     hour: clickedTime.hour + 1,
-                                    minute: clickedTime.minute),
+                                    minute: 0),
                                 onTap: () {
                                   print("meeting A Details");
                                 },
