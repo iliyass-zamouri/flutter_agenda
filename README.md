@@ -23,7 +23,7 @@ A powerful and flexible Agenda Widget Package for Flutter with **Multi-Day Timel
 
 **iPad Simulator (Multi-Day View)**
 
-![Flutter Agenda on iPad](Simulator%20Screenshot%20-%20iPad%20(A16).png)
+<img src="https://raw.githubusercontent.com/iliyass-zamouri/flutter_agenda/main/Simulator%20Screenshot%20-%20iPad%20(A16).png" />
 
 <!-- If the image doesn't load on GitHub, ensure the file is committed to the repo root -->
 
