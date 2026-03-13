@@ -32,6 +32,7 @@ class _PillarViewState extends State<PillarView> {
   Timer? _scrollEndTimer;
   bool _hasScrolled = false;
   double _lastScrollPosition = 0.0;
+  double? _tapDownPosition;
 
   @override
   void initState() {
@@ -79,12 +80,19 @@ class _PillarViewState extends State<PillarView> {
       physics: ClampingScrollPhysics(),
       child: GestureDetector(
         onTapDown: (TapDownDetails details) {
-          if (!_hasScrolled && widget.callBack != null) {
+          _tapDownPosition = details.localPosition.dy;
+        },
+        onTapUp: (TapUpDetails details) {
+          if (!_hasScrolled && widget.callBack != null && _tapDownPosition != null) {
             widget.callBack!(
-                tappedHour(details.localPosition.dy, widget.agendaStyle.timeSlot.height,
+                tappedHour(_tapDownPosition!, widget.agendaStyle.timeSlot.height,
                     widget.agendaStyle.startHour),
                 widget.headObject);
           }
+          _tapDownPosition = null;
+        },
+        onTapCancel: () {
+          _tapDownPosition = null;
         },
         onPanStart: (DragStartDetails details) {
           _hasScrolled = true;
@@ -118,7 +126,7 @@ class _PillarViewState extends State<PillarView> {
                 final index = entry.key;
                 final event = entry.value;
                 return EventView(
-                  key: ValueKey('${event.title}_${event.start.getDisplayText()}_${widget.agendaStyle.timeSlot.height}'),
+                  key: ValueKey('${event.title}_${event.start.getDisplayText()}_${widget.agendaStyle.timeSlot.height}_$index'),
                   event: event,
                   lenght: widget.lenght,
                   agendaStyle: widget.agendaStyle,
@@ -145,12 +153,10 @@ class _PillarViewState extends State<PillarView> {
       int dayOffset = 0;
       
       // Find which day was tapped
+      // Layout: [Day0][Sep][Day1][Sep][Day2]... - always subtract separator when crossing a day
       while (currentPosition > dayHeight) {
         currentPosition -= dayHeight;
-        if (dayOffset > 0) {
-          // Account for day separator (not present before first day)
-          currentPosition -= daySeparatorHeight;
-        }
+        currentPosition -= daySeparatorHeight;
         dayOffset++;
         
         // Prevent infinite loop

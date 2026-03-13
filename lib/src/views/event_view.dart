@@ -99,9 +99,29 @@ class EventView extends StatelessWidget {
   }
 
   double height() {
-    return calculateTopOffset(0, event.end.differenceInMinutes(event.start),
+    double timeHeight = calculateTopOffset(
+            0, event.end.differenceInMinutes(event.start),
             agendaStyle.timeSlot.height) +
         1;
+
+    if (agendaStyle.enableMultiDayEvents == true &&
+        event.start is DateTimeEventTime &&
+        event.end is DateTimeEventTime) {
+      final startDateTime = (event.start as DateTimeEventTime).dateTime;
+      final endDateTime = (event.end as DateTimeEventTime).dateTime;
+      final startDay =
+          DateTime(startDateTime.year, startDateTime.month, startDateTime.day);
+      final endDay =
+          DateTime(endDateTime.year, endDateTime.month, endDateTime.day);
+      final dayBoundariesCrossed = endDay.difference(startDay).inDays;
+      if (dayBoundariesCrossed > 0) {
+        final daySeparatorHeight =
+            agendaStyle.daySeparatorHeight ?? 40.0;
+        return timeHeight + (dayBoundariesCrossed * daySeparatorHeight);
+      }
+    }
+
+    return timeHeight;
   }
 
   double calculateTopOffset(

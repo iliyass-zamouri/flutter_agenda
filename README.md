@@ -20,13 +20,18 @@ A powerful and flexible Agenda Widget Package for Flutter with **Multi-Day Timel
 # Show case
 
 <img src="https://raw.githubusercontent.com/iliyass-zamouri/flutter_agenda/main/images/flutter_agenda.png" />
-<!-- <img src="https://raw.githubusercontent.com/iliyass-zamouri/flutter_agenda/main/images/flutter_agenda.gif" height="440" />   -->
+
+**iPad Simulator (Multi-Day View)**
+
+![Flutter Agenda on iPad](Simulator%20Screenshot%20-%20iPad%20(A16).png)
+
+<!-- If the image doesn't load on GitHub, ensure the file is committed to the repo root -->
 
 # Install
 
 ```yaml
 dependencies:
-  flutter_agenda: ^5.0.0
+  flutter_agenda: ^6.0.0
 ```
 
 ```dart
@@ -35,14 +40,32 @@ import 'package:flutter_agenda/flutter_agenda.dart';
 
 ## How to use it
 
-### 📅 Single-Day Agenda (Basic Usage)
+---
+
+## 📅 Single-Day Calendar View
+
+The **single-day view** displays a timeline for one day only. It’s ideal for daily scheduling: office hours, meetings, appointments, or any scenario where events occur within a single day.
+
+### When to Use Single-Day View
+
+- Daily appointment scheduling (e.g. 9 AM–5 PM)
+- Meeting room or resource booking within one day
+- Classroom timetables
+- Personal daily planners
+
+### Configuration
 
 ```dart
 FlutterAgenda(
   resources: resources,
   agendaStyle: AgendaStyle(
+    // Time range for the day (e.g. 9 AM to 8 PM)
     startHour: 9,
     endHour: 20,
+    
+    // Leave false or omit – single-day mode is the default
+    enableMultiDayEvents: false,
+    
     direction: TextDirection.ltr,
     headerLogo: HeaderLogo.bar,
     timeItemWidth: 45,
@@ -50,47 +73,188 @@ FlutterAgenda(
     headersPosition: HeadersPosition.top, // or HeadersPosition.bottom
   ),
   onTap: (clickedTime, object) {
+    // clickedTime is always SingleDayEventTime in single-day mode
     print("Clicked time: ${clickedTime.hour}:${clickedTime.minute}");
-    // don't forget to cast the object back to its original type
-    print("Head Object related to the resource: $object");
+    print("Resource object: $object");
   },
 )
 ```
 
-### 🌐 Multi-Day Timeline (24/7 Operations)
+### Timeline Structure (Single-Day)
+
+- One column of hours from `startHour` to `endHour`
+- Each hour is split by `timeSlot` (15 min, 30 min, or 1 hour)
+- Resources/columns are horizontal; time runs vertically
+
+### Key Properties for Single-Day
+
+| Property      | Description                                           | Example    |
+|---------------|-------------------------------------------------------|------------|
+| `startHour`   | First hour shown (0–24)                               | `9`        |
+| `endHour`     | Last hour shown (0–24)                                | `20`       |
+| `timeSlot`    | Granularity and row height: `TimeSlot.quarter` (15 min, 160px), `TimeSlot.half` (30 min, 80px), `TimeSlot.full` (1h, 60px) | `TimeSlot.half` |
+| `timeItemWidth` | Width of the time column                             | `45`       |
+| `enableMultiDayEvents` | Must be `false` (default) for single-day       | `false`    |
+
+### Events in Single-Day View
+
+Use `AgendaEvent` with `SingleDayEventTime`:
+
+```dart
+AgendaEvent(
+  title: "Team Meeting",
+  subtitle: "Conference Room A",
+  start: SingleDayEventTime(hour: 10, minute: 0),
+  end: SingleDayEventTime(hour: 11, minute: 30),
+  backgroundColor: Colors.blue,
+)
+```
+
+### Single-Day `onTap` Behavior
+
+- `clickedTime` is always `SingleDayEventTime` (hour and minute only)
+- `object` is the resource’s head object (e.g. employee ID, room ID)
+- Use `clickedTime.hour` and `clickedTime.minute` to create events
+
+---
+
+## 🌐 Multi-Day Calendar View
+
+The **multi-day view** shows a continuous timeline across several days. Events can span midnight or multiple days, suitable for 24/7 shifts, conferences, and maintenance windows.
+
+### When to Use Multi-Day View
+
+- Shift planning (e.g. night shifts across midnight)
+- 24/7 operations (support, manufacturing)
+- Multi-day conferences or workshops
+- Maintenance windows (e.g. overnight deployments)
+- Events spanning several days
+
+### Configuration
 
 ```dart
 FlutterAgenda(
   resources: multiDayResources,
   agendaStyle: AgendaStyle(
+    // Full 24-hour day
     startHour: 0,
     endHour: 24,
-    enableMultiDayEvents: true, // Enable multi-day support
+    
+    // Required for multi-day view
+    enableMultiDayEvents: true,
     timelineStartDate: DateTime.now(),
     timelineEndDate: DateTime.now().add(Duration(days: 7)),
+    
     direction: TextDirection.ltr,
     headerLogo: HeaderLogo.bar,
     timeItemWidth: 45,
-    timeSlot: TimeSlot.quarter,
-    // Day separator styling
-    daySeparatorHeight: 40.0,
-    daySeparatorColor: Colors.grey[200],
-    daySeparatorBorderColor: Colors.grey[400],
+    timeSlot: TimeSlot.half,
+    
+    // Day separator styling (visible between days)
+    daySeparatorHeight: 50.0,
+    daySeparatorColor: Colors.grey[100],
+    daySeparatorBorderColor: Colors.grey[400]!,
   ),
   onTap: (clickedTime, object) {
     if (clickedTime is DateTimeEventTime) {
-      print("Multi-day clicked: ${clickedTime.toDateTime()}");
+      print("Clicked: ${clickedTime.toDateTime()}");
     } else {
-      print("Single-day clicked: ${clickedTime.hour}:${clickedTime.minute}");
+      print("Clicked: ${clickedTime.hour}:${clickedTime.minute}");
     }
     print("Resource: $object");
   },
 )
 ```
 
-### 🎯 Creating Events
+### Timeline Structure (Multi-Day)
 
-#### Single-Day Events
+- Timeline repeats for each day from `timelineStartDate` to `timelineEndDate`
+- Between days: **day separators** show date (e.g. "Tue. 14/03")
+- Events are positioned by full `DateTime` (date + time)
+
+### Key Properties for Multi-Day
+
+| Property                 | Description                                      | Example              |
+|--------------------------|--------------------------------------------------|----------------------|
+| `enableMultiDayEvents`   | Must be `true` for multi-day                     | `true`               |
+| `timelineStartDate`      | First day of the timeline                        | `DateTime.now()`     |
+| `timelineEndDate`        | Last day (inclusive)                             | `DateTime.now().add(Duration(days: 7))` |
+| `daySeparatorHeight`     | Height of the day separator row                  | `50.0`               |
+| `daySeparatorColor`      | Background color of separators                   | `Colors.grey[100]`   |
+| `daySeparatorBorderColor`| Border color between days                        | `Colors.grey[400]`   |
+| `daySeparatorTextStyle`  | Text style for day name/number                   | `TextStyle(...)`     |
+| `daySeparatorSubtextStyle` | Text style for secondary date text             | `TextStyle(...)`     |
+
+### Events in Multi-Day View
+
+Use `MultiDayAgendaEvent.spanningDays` for events crossing midnight or multiple days:
+
+```dart
+// Night shift (22:00 Monday → 06:00 Tuesday)
+MultiDayAgendaEvent.spanningDays(
+  title: "Night Shift",
+  subtitle: "24/7 Support",
+  startDate: DateTime(2024, 1, 15, 22, 0),
+  endDate: DateTime(2024, 1, 16, 6, 0),
+  backgroundColor: Colors.indigo,
+)
+
+// 3-day conference
+MultiDayAgendaEvent.spanningDays(
+  title: "Tech Conference 2024",
+  subtitle: "Main Event",
+  startDate: DateTime(2024, 1, 20, 9, 0),
+  endDate: DateTime(2024, 1, 22, 17, 0),
+  backgroundColor: Colors.orange,
+)
+```
+
+Both `AgendaEvent` (with `SingleDayEventTime` or `DateTimeEventTime`) and `MultiDayAgendaEvent` are supported in the same resource list.
+
+### Multi-Day `onTap` Behavior
+
+- `clickedTime` can be:
+  - `DateTimeEventTime` when tapping in multi-day mode (includes date)
+  - `SingleDayEventTime` when tapping in single-day mode
+- Check type before use: `if (clickedTime is DateTimeEventTime)`
+- Use `clickedTime.toDateTime()` for full `DateTime` when adding events
+
+### Day Separator Format
+
+Separators show:
+
+- Line 1: Day name (Mon., Tue., etc.)
+- Line 2: Day/month (e.g. 14/03)
+
+Customize via `daySeparatorTextStyle` and `daySeparatorSubtextStyle`.
+
+---
+
+## 📊 Comparison: Single-Day vs Multi-Day
+
+| Aspect              | Single-Day                    | Multi-Day                          |
+|---------------------|-------------------------------|------------------------------------|
+| **Timeline scope**  | One day                       | Several days                       |
+| **Configuration**   | `enableMultiDayEvents: false` (default) | `enableMultiDayEvents: true`       |
+| **Date range**      | N/A (uses current day)        | `timelineStartDate` / `timelineEndDate` |
+| **Event time type** | `SingleDayEventTime`          | `DateTimeEventTime` / `MultiDayAgendaEvent` |
+| **Cross-midnight**  | Not supported                 | Supported                          |
+| **Day separators**  | None                          | Between each day                   |
+| **`onTap` time**    | Hour + minute only            | Full `DateTime`                    |
+| **Typical use**     | Daily schedules, meetings     | Shifts, 24/7 ops, conferences      |
+
+### Choosing the Right View
+
+- **Single-day**: Events stay within one day, no overnight shifts, no multi-day conferences.
+- **Multi-day**: Events cross midnight or span multiple days, or you need 24-hour coverage across a date range.
+
+---
+
+## 🎯 Creating Events
+
+See the [Single-Day](#-single-day-calendar-view) and [Multi-Day](#-multi-day-calendar-view) sections above for full details. Quick reference:
+
+#### Single-Day Events (use in single-day view)
 ```dart
 final singleDayEvent = AgendaEvent(
   title: "Team Meeting",
@@ -101,7 +265,7 @@ final singleDayEvent = AgendaEvent(
 );
 ```
 
-#### Multi-Day Events
+#### Multi-Day Events (use in multi-day view)
 ```dart
 final multiDayEvent = MultiDayAgendaEvent.spanningDays(
   title: "Night Shift Operations",
@@ -112,7 +276,11 @@ final multiDayEvent = MultiDayAgendaEvent.spanningDays(
 );
 ```
 
-### 🔧 Advanced Configuration
+> **Note:** In multi-day view, you can mix `AgendaEvent` (with `SingleDayEventTime`) and `MultiDayAgendaEvent` in the same resource. Single-day events are interpreted relative to the timeline's first day.
+
+---
+
+## 🔧 Advanced Configuration
 
 #### Custom Styling
 ```dart
@@ -154,14 +322,23 @@ ChangeNotifierProvider(
 )
 ```
 
-### 📋 Use Cases
+---
 
-- **🏥 Healthcare**: 24/7 shift scheduling, patient monitoring
-- **🏭 Manufacturing**: Continuous operations, maintenance windows
-- **🎯 Events**: Conferences, festivals spanning multiple days
-- **🚨 Support**: Round-the-clock customer service scheduling
-- **🔧 Maintenance**: System updates across time zones
-- **📈 Business**: Global operations coordination
+## 📋 Use Cases by View Type
+
+**Single-Day View:**
+- **📅 Daily planners** – Personal schedules, to-do lists
+- **🏢 Office scheduling** – Meeting rooms, desks (9 AM–6 PM)
+- **📚 Class timetables** – School/university schedules
+- **💼 Appointments** – Doctor, salon, service bookings
+
+**Multi-Day View:**
+- **🏥 Healthcare** – 24/7 shift scheduling, patient monitoring
+- **🏭 Manufacturing** – Continuous operations, maintenance windows
+- **🎯 Events** – Conferences, festivals spanning multiple days
+- **🚨 Support** – Round-the-clock customer service scheduling
+- **🔧 Maintenance** – System updates across time zones
+- **📈 Business** – Global operations coordination
 
 ## 🔄 Migration from v4.x to v5.0
 

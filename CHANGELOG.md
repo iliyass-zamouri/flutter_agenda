@@ -1,3 +1,18 @@
+## [6.0.0] - 2025-03-13
+
+* **🚀 Major Performance Overhaul**: ListView.builder for pillars and timeline enables lazy loading and reduces memory
+* **⚡ Granular Rebuilds**: Selector + RepaintBoundary isolate resource pillars for efficient updates
+* **📐 Height Caching**: OptimizedPillarView caches height and invalidates only when style changes
+* **🔄 Proper Disposal**: Scroll controllers are now disposed when resources are removed
+* **📏 Multi-Day Event Height**: Fixed EventView height for events spanning day boundaries (includes separator heights)
+* **👆 Improved Tap Handling**: Switched to onTapUp with stored position for reliable tap detection (avoids scroll conflicts)
+* **🗓️ Day Separator Tap Fix**: Corrected tap-to-time calculation in multi-day mode
+* **🔧 Null-Safe onTap**: Optional `onTap` callback support with proper null handling
+* **📊 Model Equality**: Added `==` and `hashCode` to AgendaEvent, EventTime, Header, Resource for correct state management
+* **🎨 Header Logo**: Circle header logo now displays pillar color
+* **🔑 Enhanced Keys**: EventView keys include resource index for proper rebuild tracking
+* **📦 SDK Update**: Minimum SDK constraint raised to 2.14.0 (Object.hash compatibility)
+
 ## [5.0.5] - 2024-01-15
 * **🎉 MAJOR FIX**: Completely resolved timeslot changes when scrolled - events and painting now update perfectly
 * **🔑 Widget Keys Solution**: Added unique keys to all timeline and event widgets including timeslot height

@@ -1,6 +1,7 @@
 # Exclude example files from publishing
 example/
 images/
+build/
 publish.bat
 publish.sh
 REFACTORING_SUMMARY.md

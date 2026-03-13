@@ -101,6 +101,17 @@ class SingleDayEventTime extends EventTime {
 
   @override
   String toString() => 'SingleDayEventTime($hour:$minute)';
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SingleDayEventTime &&
+          runtimeType == other.runtimeType &&
+          hour == other.hour &&
+          minute == other.minute;
+
+  @override
+  int get hashCode => Object.hash(hour, minute);
 }
 
 /// New EventTime implementation for multi-day events
@@ -210,6 +221,16 @@ class DateTimeEventTime extends EventTime {
 
   @override
   String toString() => 'DateTimeEventTime(${dateTime.toIso8601String()})';
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is DateTimeEventTime &&
+          runtimeType == other.runtimeType &&
+          dateTime.isAtSameMomentAs(other.dateTime);
+
+  @override
+  int get hashCode => dateTime.hashCode;
 }
 
 /// Factory function to create EventTime instances

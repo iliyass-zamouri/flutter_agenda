@@ -32,4 +32,26 @@ class Header {
     this.subtitleStyle = const TextStyle(
         color: Color(0xFFA1A1A0), fontWeight: FontWeight.w300, fontSize: 10),
   });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Header &&
+          runtimeType == other.runtimeType &&
+          title == other.title &&
+          subtitle == other.subtitle &&
+          object == other.object &&
+          height == other.height &&
+          backgroundColor == other.backgroundColor &&
+          color == other.color;
+
+  @override
+  int get hashCode => Object.hash(
+        title,
+        subtitle,
+        object,
+        height,
+        backgroundColor,
+        color,
+      );
 }

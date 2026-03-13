@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_agenda/flutter_agenda.dart';
 import 'package:flutter_agenda/src/controllers/scroll_linker.dart';
@@ -101,20 +100,16 @@ class _FlutterAgendaState extends State<FlutterAgenda> {
     super.didUpdateWidget(oldWidget);
     
     // Update scroll controllers if needed
-    if (widget.resources.length + 1 > _verticalScrollControllers.length) {
-      for (int i = 0;
-          i <=
-              (widget.resources.length + 1) - _verticalScrollControllers.length;
-          i++) {
+    final neededCount = widget.resources.length + 1;
+    final currentCount = _verticalScrollControllers.length;
+    if (neededCount > currentCount) {
+      for (int i = 0; i < neededCount - currentCount; i++) {
         _verticalScrollControllers.add(_verticalScrollLinker.addAndGet());
       }
-    } else if (widget.resources.length + 1 <
-        _verticalScrollControllers.length) {
-      for (int i = 0;
-          i <=
-              _verticalScrollControllers.length - (widget.resources.length + 1);
-          i++) {
-        _verticalScrollControllers.removeLast();
+    } else if (neededCount < currentCount) {
+      for (int i = 0; i < currentCount - neededCount; i++) {
+        final controller = _verticalScrollControllers.removeLast();
+        controller.dispose();
       }
     }
     
@@ -125,6 +120,9 @@ class _FlutterAgendaState extends State<FlutterAgenda> {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _stateController.clearChangeFlags();
+    });
     return Directionality(
       textDirection: widget.agendaStyle.direction,
       child: ChangeNotifierProvider.value(
@@ -209,25 +207,35 @@ class _FlutterAgendaState extends State<FlutterAgenda> {
       ),
       child: ScrollConfiguration(
         behavior: NoGlowScroll(),
-        child: ListView(
+        child: ListView.builder(
           scrollDirection: Axis.horizontal,
           physics: ClampingScrollPhysics(),
-          // reverse: widget.agendaStyle.direction == TextDirection.rtl,
           controller: _bodyScrollController,
-          children: widget.resources.asMap().entries.map((entry) {
-            final index = entry.key;
-            final pillar = entry.value;
-            return OptimizedPillarView(
-              headObject: pillar.head.object,
-              length: widget.resources.length,
-              scrollController: _verticalScrollControllers[index + 1],
-              events: pillar.events,
-              callBack: (p0, p1) => widget.onTap!(p0, p1),
-              agendaStyle: widget.agendaStyle,
-              resourceIndex: index,
-              hasChanged: _stateController.hasResourceChanged(index),
+          itemCount: widget.resources.length,
+          itemBuilder: (context, index) {
+            final pillar = widget.resources[index];
+            return Selector<AgendaStateController, bool>(
+              key: ValueKey('pillar_selector_$index'),
+              selector: (_, ctrl) => ctrl.hasResourceChanged(index),
+              shouldRebuild: (prev, next) => next,
+              builder: (context, hasChanged, _) {
+                return RepaintBoundary(
+                  child: OptimizedPillarView(
+                    headObject: pillar.head.object,
+                    length: widget.resources.length,
+                    scrollController: _verticalScrollControllers[index + 1],
+                    events: pillar.events,
+                    callBack: widget.onTap != null
+                        ? (p0, p1) => widget.onTap!(p0, p1)
+                        : null,
+                    agendaStyle: widget.agendaStyle,
+                    resourceIndex: index,
+                    hasChanged: hasChanged,
+                  ),
+                );
+              },
             );
-          }).toList(),
+          },
         ),
       ),
     );
@@ -260,87 +268,86 @@ class _FlutterAgendaState extends State<FlutterAgenda> {
       ),
       child: ScrollConfiguration(
         behavior: NoGlowScroll(),
-        child: ListView(
-          key: ValueKey('timeline_list_${widget.agendaStyle.timeSlot.height}_${widget.agendaStyle.enableMultiDayEvents}'),
-          controller: _verticalScrollControllers[0],
-          scrollDirection: Axis.vertical,
-          physics: ClampingScrollPhysics(),
-          shrinkWrap: true,
-          children: _buildTimelineItems(),
+        child: RepaintBoundary(
+          child: ListView.builder(
+            key: ValueKey('timeline_list_${widget.agendaStyle.timeSlot.height}_${widget.agendaStyle.enableMultiDayEvents}'),
+            controller: _verticalScrollControllers[0],
+            scrollDirection: Axis.vertical,
+            physics: ClampingScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: _timelineItemCount,
+            itemBuilder: (context, index) => _buildTimelineItemAtIndex(index),
+          ),
         ),
       ),
     );
   }
 
-  List<Widget> _buildTimelineItems() {
+  int get _timelineItemCount {
     if (widget.agendaStyle.enableMultiDayEvents == true) {
-      return _buildMultiDayTimeline();
+      final startDate = widget.agendaStyle.timelineStartDate ?? DateTime.now();
+      final endDate = widget.agendaStyle.timelineEndDate ?? startDate.add(const Duration(days: 1));
+      final daysCount = endDate.difference(startDate).inDays + 1;
+      final hoursPerDay = widget.agendaStyle.endHour - widget.agendaStyle.startHour;
+      return daysCount * hoursPerDay + (daysCount - 1);
     } else {
-      return _buildSingleDayTimeline();
+      return widget.agendaStyle.endHour - widget.agendaStyle.startHour;
     }
   }
 
-  List<Widget> _buildMultiDayTimeline() {
-    final List<Widget> timelineItems = [];
-    
-    // Get the date range for the timeline
-    final startDate = widget.agendaStyle.timelineStartDate ?? DateTime.now();
-    final endDate = widget.agendaStyle.timelineEndDate ?? startDate.add(const Duration(days: 1));
-    
-    // Generate timeline for each day
-    var currentDate = DateTime(startDate.year, startDate.month, startDate.day);
-    final lastDate = DateTime(endDate.year, endDate.month, endDate.day);
-    
-    while (currentDate.isBefore(lastDate) || currentDate.isAtSameMomentAs(lastDate)) {
-      // Add day separator (except for the first day)
-      if (currentDate.isAfter(DateTime(startDate.year, startDate.month, startDate.day))) {
-        timelineItems.add(
-          Container(
-            height: widget.agendaStyle.daySeparatorHeight ?? 40.0,
-            decoration: BoxDecoration(
-              color: widget.agendaStyle.daySeparatorColor ?? Colors.grey[200],
-              border: Border(
-                top: BorderSide(
-                  color: widget.agendaStyle.daySeparatorBorderColor ?? Colors.grey[400]!,
-                  width: 2.0,
-                ),
-                bottom: BorderSide(
-                  color: widget.agendaStyle.daySeparatorBorderColor ?? Colors.grey[400]!,
-                  width: 1.0,
-                ),
-              ),
-            ),
-            child: Center(
-              child: Text(
-                '${_getDayName(currentDate.weekday)}\n${currentDate.day.toString().padLeft(2, '0')}/${currentDate.month.toString().padLeft(2, '0')}',
-                style: widget.agendaStyle.daySeparatorTextStyle ?? const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+  Widget _buildTimelineItemAtIndex(int index) {
+    if (widget.agendaStyle.enableMultiDayEvents == true) {
+      final startDate = widget.agendaStyle.timelineStartDate ?? DateTime.now();
+      final endDate = widget.agendaStyle.timelineEndDate ?? startDate.add(const Duration(days: 1));
+      final daysCount = endDate.difference(startDate).inDays + 1;
+      final hoursPerDay = widget.agendaStyle.endHour - widget.agendaStyle.startHour;
+      int offset = index;
+      for (int dayIndex = 0; dayIndex < daysCount; dayIndex++) {
+        if (offset < hoursPerDay) {
+          final hour = widget.agendaStyle.startHour + offset;
+          return _buildTimelineHourItem(hour);
+        }
+        offset -= hoursPerDay;
+        if (dayIndex < daysCount - 1) {
+          if (offset == 0) {
+            final currentDate = DateTime(startDate.year, startDate.month, startDate.day)
+                .add(Duration(days: dayIndex + 1));
+            return Container(
+              key: ValueKey('timeline_sep_${currentDate.day}'),
+              height: widget.agendaStyle.daySeparatorHeight ?? 40.0,
+              decoration: BoxDecoration(
+                color: widget.agendaStyle.daySeparatorColor ?? Colors.grey[200],
+                border: Border(
+                  top: BorderSide(
+                    color: widget.agendaStyle.daySeparatorBorderColor ?? Colors.grey[400]!,
+                    width: 2.0,
+                  ),
+                  bottom: BorderSide(
+                    color: widget.agendaStyle.daySeparatorBorderColor ?? Colors.grey[400]!,
+                    width: 1.0,
+                  ),
                 ),
               ),
-            ),
-          ),
-        );
+              child: Center(
+                child: Text(
+                  '${_getDayName(currentDate.weekday)}\n${currentDate.day.toString().padLeft(2, '0')}/${currentDate.month.toString().padLeft(2, '0')}',
+                  style: widget.agendaStyle.daySeparatorTextStyle ?? const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                ),
+              ),
+            );
+          }
+          offset -= 1;
+        }
       }
-      
-      // Add timeline items for this day
-      for (var hour = widget.agendaStyle.startHour; hour < widget.agendaStyle.endHour; hour++) {
-        timelineItems.add(_buildTimelineHourItem(hour));
-      }
-      
-      // Move to next day
-      currentDate = currentDate.add(const Duration(days: 1));
+      return const SizedBox.shrink();
+    } else {
+      final hour = widget.agendaStyle.startHour + index;
+      return _buildTimelineHourItem(hour);
     }
-    
-    return timelineItems;
-  }
-
-  List<Widget> _buildSingleDayTimeline() {
-    return [
-      for (var hour = widget.agendaStyle.startHour; hour < widget.agendaStyle.endHour; hour++)
-        _buildTimelineHourItem(hour)
-    ];
   }
 
   Widget _buildTimelineHourItem(int hour) {
@@ -497,13 +504,16 @@ class _FlutterAgendaState extends State<FlutterAgenda> {
               : 0),
       child: ScrollConfiguration(
         behavior: NoGlowScroll(),
-        child: ListView(
-          scrollDirection: Axis.horizontal,
-          physics: ClampingScrollPhysics(),
-          controller: _headerScrollController,
-          shrinkWrap: true,
-          children: widget.resources.map((pillar) {
-            return GestureDetector(
+        child: RepaintBoundary(
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            physics: ClampingScrollPhysics(),
+            controller: _headerScrollController,
+            shrinkWrap: true,
+            itemCount: widget.resources.length,
+            itemBuilder: (context, index) {
+              final pillar = widget.resources[index];
+              return GestureDetector(
               onTap: () => pillar.head.onTap,
               child: Container(
                 width: widget.agendaStyle.fittedWidth
@@ -532,33 +542,19 @@ class _FlutterAgendaState extends State<FlutterAgenda> {
                             EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                         child: widget.agendaStyle.headerLogo ==
                                 HeaderLogo.circle
-                            ? Material(
-                                color: pillar.head.color.withOpacity(0.5),
-                                borderRadius: BorderRadius.circular(50),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(50),
-                                  child: BackdropFilter(
-                                    filter: ImageFilter.blur(
-                                      sigmaX: 20.0,
-                                      sigmaY: 7.0,
-                                    ),
-                                    child: Container(
-                                      width:
-                                          widget.agendaStyle.headerHeight - 10,
-                                      decoration: BoxDecoration(
-                                        color: Colors.transparent,
-                                        borderRadius: BorderRadius.circular(50),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          pillar.head.title
-                                              .substring(0, 1)
-                                              .toUpperCase(),
-                                          style: pillar.head.textStyle
-                                              .copyWith(fontSize: 14),
-                                        ),
-                                      ),
-                                    ),
+                            ? Container(
+                                width: widget.agendaStyle.headerHeight - 10,
+                                decoration: BoxDecoration(
+                                  color: pillar.head.color.withOpacity(0.5),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    pillar.head.title
+                                        .substring(0, 1)
+                                        .toUpperCase(),
+                                    style: pillar.head.textStyle
+                                        .copyWith(fontSize: 14),
                                   ),
                                 ),
                               )
@@ -598,7 +594,8 @@ class _FlutterAgendaState extends State<FlutterAgenda> {
                 ),
               ),
             );
-          }).toList(),
+            },
+          ),
         ),
       ),
     );

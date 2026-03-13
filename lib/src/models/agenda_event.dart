@@ -39,4 +39,30 @@ class AgendaEvent {
     this.subtitleStyle =
         const TextStyle(fontWeight: FontWeight.w800, color: Color(0xFF363636)),
   }) : assert(end.isAfter(start));
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AgendaEvent &&
+          runtimeType == other.runtimeType &&
+          title == other.title &&
+          subtitle == other.subtitle &&
+          start == other.start &&
+          end == other.end &&
+          padding == other.padding &&
+          margin == other.margin &&
+          decoration == other.decoration &&
+          backgroundColor == other.backgroundColor;
+
+  @override
+  int get hashCode => Object.hash(
+        title,
+        subtitle,
+        start,
+        end,
+        padding,
+        margin,
+        decoration,
+        backgroundColor,
+      );
 }

@@ -80,11 +80,33 @@ class _PillarContentState extends State<_PillarContent> {
   Timer? _scrollEndTimer;
   bool _hasScrolled = false;
   double _lastScrollPosition = 0.0;
+  double? _tapDownPosition;
+  double? _cachedHeight;
+  AgendaStyle? _cachedHeightStyle;
 
   @override
   void initState() {
     super.initState();
     widget.scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void didUpdateWidget(covariant _PillarContent oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (_heightStyleChanged(oldWidget.agendaStyle, widget.agendaStyle)) {
+      _cachedHeight = null;
+      _cachedHeightStyle = null;
+    }
+  }
+
+  bool _heightStyleChanged(AgendaStyle oldStyle, AgendaStyle newStyle) {
+    return oldStyle.enableMultiDayEvents != newStyle.enableMultiDayEvents ||
+        oldStyle.startHour != newStyle.startHour ||
+        oldStyle.endHour != newStyle.endHour ||
+        oldStyle.timeSlot != newStyle.timeSlot ||
+        oldStyle.daySeparatorHeight != newStyle.daySeparatorHeight ||
+        oldStyle.timelineStartDate != newStyle.timelineStartDate ||
+        oldStyle.timelineEndDate != newStyle.timelineEndDate;
   }
 
   @override
@@ -124,12 +146,19 @@ class _PillarContentState extends State<_PillarContent> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTapDown: (TapDownDetails details) {
-        if (!_hasScrolled && widget.callBack != null) {
+        _tapDownPosition = details.localPosition.dy;
+      },
+      onTapUp: (TapUpDetails details) {
+        if (!_hasScrolled && widget.callBack != null && _tapDownPosition != null) {
           widget.callBack!(
-              tappedHour(details.localPosition.dy, widget.agendaStyle.timeSlot.height,
+              tappedHour(_tapDownPosition!, widget.agendaStyle.timeSlot.height,
                   widget.agendaStyle.startHour),
               widget.headObject);
         }
+        _tapDownPosition = null;
+      },
+      onTapCancel: () {
+        _tapDownPosition = null;
       },
       onPanStart: (DragStartDetails details) {
         _hasScrolled = true;
@@ -138,7 +167,7 @@ class _PillarContentState extends State<_PillarContent> {
         _hasScrolled = true;
       },
       child: Container(
-        height: height(),
+        height: _getHeight(),
         width: widget.agendaStyle.fittedWidth
             ? Utils.pillarWidth(widget.length, widget.agendaStyle.timeItemWidth,
                 widget.agendaStyle.pillarWidth, MediaQuery.of(context).orientation)
@@ -163,7 +192,7 @@ class _PillarContentState extends State<_PillarContent> {
               final index = entry.key;
               final event = entry.value;
               return EventView(
-                key: ValueKey('${event.title}_${event.start.getDisplayText()}_${widget.agendaStyle.timeSlot.height}'),
+                key: ValueKey('${event.title}_${event.start.getDisplayText()}_${widget.agendaStyle.timeSlot.height}_${widget.resourceIndex}_$index'),
                 event: event,
                 lenght: widget.length,
                 agendaStyle: widget.agendaStyle,
@@ -189,12 +218,10 @@ class _PillarContentState extends State<_PillarContent> {
       int dayOffset = 0;
       
       // Find which day was tapped
+      // Layout: [Day0][Sep][Day1][Sep][Day2]... - always subtract separator when crossing a day
       while (currentPosition > dayHeight) {
         currentPosition -= dayHeight;
-        if (dayOffset > 0) {
-          // Account for day separator (not present before first day)
-          currentPosition -= daySeparatorHeight;
-        }
+        currentPosition -= daySeparatorHeight;
         dayOffset++;
         
         // Prevent infinite loop
@@ -239,7 +266,17 @@ class _PillarContentState extends State<_PillarContent> {
     }
   }
 
-  double height() {
+  double _getHeight() {
+    if (_cachedHeight != null && _cachedHeightStyle == widget.agendaStyle) {
+      return _cachedHeight!;
+    }
+    final h = _computeHeight();
+    _cachedHeight = h;
+    _cachedHeightStyle = widget.agendaStyle;
+    return h;
+  }
+
+  double _computeHeight() {
     if (widget.agendaStyle.enableMultiDayEvents == true) {
       // Multi-day timeline height calculation
       final startDate = widget.agendaStyle.timelineStartDate ?? DateTime.now();
